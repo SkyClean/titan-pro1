@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Multi Wallet</title>
+    <!-- Latest compiled and minified CSS -->
+    <script defer src="../js/fontawesome-all.js"></script>
+    <link rel="stylesheet" href="../style/bootstrap.min.css">
+
+    <link class="import" rel="import" href="./wallets.html">
+    <link class="import" rel="import" href="./settings.html">
+    <link class="import" rel="import" href="./welcomes.html">
+    <link class="import" rel="import" href="./exchanges.html">
+    <link class="import" rel="import" href="./helps.html">
+    <link class="import" rel="import" href="./backups.html">
+    <link class="importcoin" rel="import" href="./EOS.html">
+    <link class="importcoin" rel="import" href="./BITCOIN.html">
+    <link class="importcoin" rel="import" href="./ETHEREUM.html">
+    <link class="importcoin" rel="import" href="./LITECOIN.html">
+    <style>
+    webview {
+      display: block;       /* iframes are inline by default */
+      border: none;         /* Reset default border */
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    span, p, h2, h3, h4, h5 {
+      color:#dedede;
+    }
+
+    .main_body{
+      background:#272e33;
+    }
+    .nav_div{
+      background:#3d4348;
+    }
+
+    .nav_div p,span{
+      font-size:18px;
+      padding-top:10px;
+    }
+
+    .nav_div p:hover{
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .nav_div div.row {
+      padding:10px 0px 10px 30px;
+    }
+
+    .nav-div {
+      background:#3d4348;
+    }
+    .nav-div.active {
+      background:#282e33;
+    }
+    .section {
+      color:#fff;
+      display:none;
+    }
+    .section.is-shown{
+      display:block;
+    }
+
+    .section.is-shown-coin{
+      display:block;
+    }
+
+    .wallet-link-div{
+      text-align:right;
+      padding:20px 10px;
+    }
+
+    .wallet-nav.color-eos{
+      border-right:1px solid #99a4ea;
+    }
+    .wallet-nav.color-lite{
+      border-right:1px solid #99c361;
+    }
+    .wallet-nav.color-bitcoin{
+      border-right:1px solid #ff9900;
+    }
+    .wallet-nav.color-ethereum{
+      border-right:1px solid #d8d8d8;
+    }
+
+    .wallet-link-div{
+        color:#dedede;
+        padding-right:20px;
+    }
+
+    .wallet-link-div:hover{
+      color:#fff;
+      cursor:pointer;
+    }
+    .wallet-link-div.eos.active p{
+        color:#99a4ea;
+    }
+    .wallet-link-div.lite.active p{
+      color:#99c361;
+    }
+    .wallet-link-div.bitcoin.active p{
+      color:#ff9900;
+    }
+    .wallet-link-div.ethereum.active p{
+      color:#d8d8d8;
+    }
+
+    #section-coin-eos p, span, label{
+      color:#99a4ea;
+      font-size:18px;
+    }
+    </style>
+</head>
+
+<body style="background:#3d4348; overflow-x:hidden;">
+    <div class="row main_body" style="width:100%; height:100%; margin:0px; ">
+      <div class="nav_div col-xs-2" style="height:100%;margin:0px;">
+         <div class="row" style="text-align:center;  padding:0px; padding-top:20px;">
+           <img src="../images/wallet.png" style="width:50px"/>
+           <h3 class="title">titanMgt Wallet</h3>
+           <h4>$<span  style="color:#fff;font-size:22px">0.00</span> USD</h4>
+         </div>
+         <div class="nav-div row" data-section="section-welcomes" style="margin-top:10px; vertical-align:center">
+           <p class="nav-link" style=""><i class="fa fa-home" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Welcome</p>
+         </div>
+         <div class="nav-div row" data-section="section-wallets">
+           <p class="nav-link"><i class="fa fa-money-bill-alt" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Wallet</p>
+         </div>
+         <div class="nav-div row" data-section="section-exchanges">
+           <p class="nav-link"><i class="fa fa-exchange-alt" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Exchange</p>
+         </div>
+         <div class="nav-div row" data-section="section-backups">
+           <p class="nav-link"><i class="fa fa-question-circle" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Backup</p>
+         </div>
+         <div class="nav-div row" data-section="section-settings">
+           <p class="nav-link"><i class="fa fa-question-circle" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Setting</p>
+         </div>
+         <div class="nav-div row" data-section="section-helps">
+           <p class="nav-link"><i class="fa fa-info-circle" aria-hidden="true" style="font-size:18px; margin-right:20px"></i>Help</p>
+         </div>
+      </div>
+      <div id="main-div" class="main_content col-xs-10" style="height:100%;margin:0px;">
+
+      </div>
+    </div>
+</body>
+
+<script>
+    if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+    }
+</script>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/main.js"></script>
+
+</html>

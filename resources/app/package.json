@@ -1,0 +1,41 @@
+{
+    "name": "multi-wallet",
+    "version": "0.0.1",
+    "description": "A minimal Ethereum wallet for Neureal",
+    "author": "Hunter Long <info@socialeck.com>",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder"
+    },
+    "build": {
+        "appId": "com.multi.wallet",
+        "productName": "multi Wallet",
+        "mac": {
+            "category": "financial"
+        },
+        "linux": {
+            "target": [
+                "deb"
+            ]
+        },
+        "win": {}
+    },
+    "repository": "https://github.com/multi-wallet",
+    "keywords": [
+        "multi",
+        "multi-wallet"
+    ],
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "~1.6.2",
+        "electron-builder": "^19.11.1"
+    },
+    "dependencies": {
+        "clipboardy": "^1.1.4",
+        "electron-default-menu": "^1.0.1",
+        "ethereum-qr-code": "^0.3.0",
+        "ethers": "^2.1.1"
+    }
+}

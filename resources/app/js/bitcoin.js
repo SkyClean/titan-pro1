@@ -97,7 +97,12 @@ function updateWallet(address){
   c_blockexplorer.getLatestBlock()
       .then(block => c_blockexplorer.getBlock(block.hash))
       .then((block) => {
-        $('#btctxfee').val(block.fee/BITCOIN_CONSTANTS.Bitcoin.Satoshis);
+        console.log('block', block);
+        // Fee Normal for a single transaction (450 bytes)
+        txNormalFeeKB = 450;
+        txfeeperbyte = block.fee / block.size;
+        fee = txNormalFeeKB * txfeeperbyte / BITCOIN_CONSTANTS.Bitcoin.Satoshis;
+        $('#btctxfee').val(fee.toFixed(8));
       });
 }
 var mywif  = null;
@@ -139,6 +144,7 @@ $('document').ready(function(){
             network: network,
         };
         db.insert(obj);
+        $('#bitcoin_wallet_address').html(docs[0].address);
         updateWallet(address);
         setInterval(updateWallet(docs[0].address), 5000);
       } else {
@@ -203,6 +209,7 @@ function SendBitcoin(){
       btc = $('#send_bitcoin_amount').html();
       to_address = $('#send_bitcoin_to').html();
       fee = $('#btctxfee').val();
+      fee = fee * BITCOIN_CONSTANTS.Bitcoin.Satoshis;
       address = $('#bitcoin_wallet_address').html();
       const satoshis = Math.round(btc * BITCOIN_CONSTANTS.Bitcoin.Satoshis);
 

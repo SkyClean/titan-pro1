@@ -83,13 +83,13 @@ function updateWallet(address){
     coins = result.unspent_outputs.reduce((a, c) => a + c.value, 0) / BITCOIN_CONSTANTS.Bitcoin.Satoshis;
     $('#bitcoin_balance').html(coins.tofixed(8));
     $('#bitcoin_qr_code').html('');
-    $('#bitcoin_qr_code').qrcode("bitcoin:address="+address+"&amount="+coins);
+    $('#bitcoin_qr_code').qrcode({width: 180,height: 180, text: address});
 
   },(e) => {
       if (e.toString() === BITCOIN_CONSTANTS.ReturnValues.NoFreeOutputs) {
           $('#bitcoin_balance').html('0.00');
           $('#bitcoin_qr_code').html('');
-          $('#bitcoin_qr_code').qrcode({width: 180,height: 180, text: "bitcoin:address="+address+"&amount=0"});
+          $('#bitcoin_qr_code').qrcode({width: 180,height: 180, text: address});
           console.log('error');
       }
   });

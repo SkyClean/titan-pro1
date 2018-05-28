@@ -139,6 +139,8 @@ $('document').ready(function(){
             network: network,
         };
         db.insert(obj);
+        updateWallet(address);
+        setInterval(updateWallet(docs[0].address), 5000);
       } else {
         console.log('bitcoin address', docs[0].address);
         $('#bitcoin_wallet_address').html(docs[0].address);

@@ -2,10 +2,10 @@
 var providers = ethers.providers;
 var Wallet = ethers.Wallet;
 
-var myWallet;
+var myEOSWallet;
 
 var tokenBalance = 0;
-var ethBalance = 0;
+var eosBalance = 0;
 var version = "0.0.1";
 
 var necpUSD = 0;
@@ -53,17 +53,7 @@ function OpenEtherScan(txid) {
   shell.openExternal('https://etherscan.io/tx/'+txid)
 }
 
-// function OpenGithubRepo() {
-//   shell.openExternal('https://github.com/hunterlong/neureal-wallet')
-// }
-//
-// function OpenGithubReleases() {
-//   shell.openExternal('https://github.com/hunterlong/neureal-wallet/releases')
-// }
-//
-// function OpenHunterGithub() {
-//   shell.openExternal('https://github.com/hunterlong')
-// }
+
 
 function OpenMyEtherWallet() {
   shell.openExternal('https://www.myetherwallet.com')
@@ -83,27 +73,7 @@ function EtherPrice() {
   });
 }
 
-function BackEOS(){
-  $('#created_myaddress').html('');
-  $('#created_privatepass').val('');
-  $('.eos-div').hide();
-  $('#eos-div-first').show();
-}
 
-function CreateWallet(){
-  var api = 'https://api.blockcypher.com/v1/eth/main/addrs?token=4229aa6c1a434b10a7e889bb1bc6e731';
-  $.post(api, function(data, status){
-    console.log(data);
-    //etherUSD = parseFloat(data[0]['price_usd']);
-    console.log(data.privatekey);
-    console.log(data.address);
-    $("#created_addressArea").attr("class", "row");
-    $('.created_myaddress').html('0x' + data.address);
-    $('.created_privatekey').html(data.private);
-    $('.eos-div').hide();
-    $('#eos-div-third').show();
-  });
-}
 UpdatePricing();
 
 function UpdatePricing() {
@@ -112,94 +82,27 @@ function UpdatePricing() {
 }
 
 
-function UpdatePortfolio() {
-  setTimeout(function() {
-    var totalStorj = tokenBalance * necpUSD;
-    var totalEth = ethBalance * etherUSD;
-    var totalPort = totalStorj + totalEth;
-    // $("#portNeurealUSD").html("($"+necpUSD+")");
-    // $("#portEthUSD").html("($"+etherUSD+")");
-    // $("#portfolioNeureal").html(totalStorj.toFixed(2))
-    // $("#portfolioEth").html(totalEth.toFixed(2))
-    // $("#portfolioTotal").html(totalPort.toFixed(2))
-    // $(".portfolio").fadeIn('fast');
-  }, 3500);
-}
 
-
-function CheckForUpdates() {
-    // var versionFile = "https://raw.githubusercontent.com/hunterlong/neureal-wallet/master/VERSION";
-    // $.get(versionFile, function(data, status){
-    //   var verCheck = data.replace(/^\s+|\s+$/g, '');
-    //     if (version != verCheck) {
-    //       alert("There's a new Update for Neureal Wallet! New Version: "+data);
-    //       OpenGithubReleases();
-    //     } else {
-    //       alert("You have the most current version");
-    //     }
-    // });
-}
-
-function CheckETHAvailable() {
-    var send = $("#send_ether_amount").val();
-    var fee = $("#ethtxfee").val();
-    var spendable = ethBalance - (send - fee);
-    if (spendable >= 0) {
-        $("#sendethbutton").prop("disabled", false);
-    } else {
-        $("#sendethbutton").prop("disabled", true);
-    }
-}
-
-function CheckTokenAvailable() {
-    var send = $("#send_amount_token").val();
-    var fee = $("#tokentxfee").val();
+function CheckEOSAvailable() {
+    var send = $("#send_eos_amount").val();
+    var fee = $("#eostxfee").val();
     var spendable = tokenBalance - (send - fee);
     if (spendable >= 0) {
-        $("#sendtokenbutton").prop("disabled", false);
+        $("#sendeosbutton").prop("disabled", false);
     } else {
-        $("#sendtokenbutton").prop("disabled", true);
+        $("#sendeosbutton").prop("disabled", true);
     }
 }
 
 setInterval(function() {
-    if (myWallet) updateBalance();
+    if (myEOSWallet) updateEOSBalance();
 }, 5000);
 
-setInterval(function() {
-    if (myWallet) UpdatePortfolio();
-}, 30000);
 
-function UseKeystore() {
-    HideButtons();
-    $("#keystoreupload").attr("class", "");
-}
-
-function UsePrivateKey() {
-    HideButtons();
-    $("#privatekey").attr("class", "");
-}
-
-function UseNewWallet() {
-    HideButtons();
-    $("#createnewwallet").attr("class", "");
-}
-
-function CopyPrivateKey(){
-  clipboardy.writeSync($('.created_privatekey').html());
-  alert("Private Key Copied: " + $('.created_privatekey').html());
-}
 
 function CopyCreatedAddress() {
     clipboardy.writeSync($('.created_myaddress').html());
     alert("Address Copied: " + $('.created_myaddress').html());
-}
-
-
-function HideButtons() {
-    $("#keystoreupload").attr("class", "hidden");
-    $("#createnewwallet").attr("class", "hidden");
-    $("#privatekey").attr("class", "hidden");
 }
 
 
@@ -208,51 +111,10 @@ function QuitAppButton() {
 }
 
 
-function OpenPrivateKey() {
-    var key = $("#privatepass").val();
-    if (key.substring(0, 2) !== '0x') {
-        key = '0x' + key;
-    }
-    if (key != '' && key.match(/^(0x)?[0-9A-fa-f]{64}$/)) {
-        HideButtons();
-        try {
-            myWallet = new Wallet(key);
-            console.log("Opened: " + myWallet.address)
-        } catch (e) {
-            console.error(e);
-        }
-        SuccessAccess();
-        updateBalance();
-        UpdatePortfolio();
-    } else {
-      $("#privatekeyerror").show();
-    }
-}
+function updateEOSBalance() {
+    var address = myEOSWallet.address;
+    $("#eos_wallet_address").html(address);
 
-function OpenNewWallet() {
-    var pass = $("#newpass").val();
-    var passconf = $("#newpassconf").val();
-}
-
-function updateBalance() {
-    var address = myWallet.address;
-    $(".myaddress").html(address);
-
-    // provider.getBalance(address).then(function(balance) {
-    //     var etherString = ethers.utils.formatEther(balance);
-    //     console.log("ETH Balance: " + etherString);
-    //     var n = parseFloat(etherString);
-    //     var ethValue = n.toLocaleString(
-    //         undefined, // use a string like 'en-US' to override browser locale
-    //         {
-    //             minimumFractionDigits: 4
-    //         }
-    //     );
-    //     var messageEl = $('#ethbal');
-    //     var split = ethValue.split(".");
-    //     ethBalance = parseFloat(ethValue);
-    //     messageEl.html(split[0] + ".<small>" + split[1] + "</small>");
-    // });
 
     var callPromise = tokenContract.functions.balanceOf(address);
     callPromise.then(function(result) {
@@ -270,7 +132,7 @@ function updateBalance() {
         );
 
         var split = atyxValue.split(".");
-        tokenBalance = parseFloat(atyxValue);
+        eosBalance = parseFloat(atyxValue);
         console.log('trueBal',result[0]);
         $(".eosspend").html(atyxValue)
         messageEl.html(split[0] + ".<small>" + split[1] + "</small>");
@@ -280,130 +142,48 @@ function updateBalance() {
 
 
 
-var keyFile;
-function OpenKeystoreFile() {
-    dialog.showOpenDialog(function(fileNames) {
-        if (fileNames === undefined) return;
-        keyFile = fileNames[0];
-        console.log(keyFile);
-    });
-}
-
-
-function SuccessAccess() {
+function SuccessAccessEOS() {
     // $(".options").hide();
     // $(".walletInput").hide();
     // $(".walletInfo").attr("class", "row walletInfo");
     // $("#walletActions").attr("class", "row");
-    $("#walletActions").attr("class", "row");
-    $("#addressArea").attr("class", "row");
-    $('.eos-div').hide();
-    $('#eos-div-second').show();
+    $('#eos_wallet_address').html(myEOSWallet.address);
+    const qr = new EthereumQRPlugin();
+
+    const sendDetails = {
+      to: myEOSWallet.address,
+      value: eosBalance,
+      gas: 42000
+    };
+    const configDetails = {
+      size:180,
+      selector: '#eos_qr_code',
+      options: {
+        margin: 2
+      }
+    };
+
+    //run the plugin
+    qr.toCanvas(sendDetails, configDetails);
 
 }
 
 
-function GetEthGas() {
-    var price = $("#ethgasprice").val();
+function GetEOSGas() {
+    var price = $("#eosgasprice").val();
     var gaslimit = 21000;
     var txfee = price * gaslimit;
-    $("#ethtxfee").val((txfee * 0.000000001).toFixed(5));
-    UpdateAvailableETH();
+    $("#eostxfee").val((txfee * 0.000000001).toFixed(5));
+    UpdateAvailableEOS();
     return false;
 }
-
-
-function GetTokenGas() {
-    var price = $("#tokengasprice").val();
-    var gaslimit = 65000;
-    var txfee = price * gaslimit;
-    $("#tokentxfee").val((txfee * 0.000000001).toFixed(5));
-    UpdateTokenFeeETH();
-    return false;
-}
-
-
-function UnlockWalletKeystore() {
-    var password = $("#keystorewalletpass").val();
-    var buffer = fs.readFileSync(keyFile);
-    var walletData = buffer.toString();
-    $("#keystorebtn").html("Decrypting...");
-    $("#keystorebtn").prop("disabled", true);
-
-    if (password!='' && keyFile!='' && Wallet.isEncryptedWallet(walletData)){
-
-        Wallet.fromEncryptedWallet(walletData, password).then(function(wallet) {
-                console.log("Opened Address: " + wallet.address);
-                wallet.provider = new ethers.providers.getDefaultProvider(false);
-                myWallet = wallet;
-                SuccessAccess();
-                updateBalance();
-                UpdatePortfolio();
-                $("#keystorebtn").html("Decrypting...");
-        });
-      } else {
-        $("#keystorejsonerror").html("Invalid Keystore JSON File")
-        $("#keystorejsonerror").show();
-        $("#keystorebtn").prop("disabled", false);
-        $("#keystorebtn").html("Open");
-      }
-}
-
-function reject() {
-  $("#keystorejsonerror").html("Incorrect Password for Keystore Wallet")
-  $("#keystorejsonerror").show();
-  $("#keystorebtn").prop("disabled", false);
-  $("#keystorebtn").html("Open");
-}
-
-
-function ConfirmButton(elem) {
-    $(elem).html("CONFIRM")
-    $(elem).attr("class", "btn btn-success")
-}
-
-
 
 var lastTranx;
 
-function SendEthereum(callback) {
-    var to = $('#send_ether_to').val();
-    var amount = $('#send_ether_amount').val();
-    $("#sendethbutton").prop("disabled", true);
-    var price = parseInt($("#ethgasprice").val()) * 1000000000;
 
-    if (to != '' && amount != '' && parseFloat(amount) <= ethBalance) {
-        myWallet.provider = new ethers.providers.getDefaultProvider(false);
-        var amountWei = ethers.utils.parseEther(amount);
-        var targetAddress = ethers.utils.getAddress(to);
-
-        myWallet.send(targetAddress, amountWei, {
-            gasPrice: price,
-            gasLimit: 21000,
-        }).then(function(txid) {
-            console.log(txid);
-            $("#sendethbutton").prop("disabled", false);
-            $('#ethermodal').modal('hide');
-            $(".txidLink").html(txid.hash);
-            $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
-            $("#senttxamount").html(amount);
-            $("#txtoaddress").html(to);
-            $("#txtype").html("ETH");
-            $('#trxsentModal').modal('show');
-            updateBalance();
-        });
-    }
-}
-
-function UpdateAvailableETH() {
-    var fee = $("#ethtxfee").val();
-    var available = ethBalance - fee;
-    $(".ethspend").html(available.toFixed(6));
-}
-
-function UpdateTokenFeeETH() {
+function UpdateAvailableEOS() {
     var fee = $("#tokentxfee").val();
-    var available = ethBalance - fee;
+    var available = eosBalance - fee;
     CheckTokenAvailable();
     $(".ethavailable").each(function(){
       $(this).html(available.toFixed(6));
@@ -419,16 +199,16 @@ function decimalPlaces(num) {
        (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
 }
 
-function SendToken(callback) {
-    var to = $('#send_to_token').val();
-    var amount = $('#send_amount_token').val();
-    $("#sendtokenbutton").prop("disabled", true);
-    var price = parseInt($("#tokengasprice").val()) * 1000000000;
+function SendEOS(callback) {
+    var to = $('#send_eos_to').val();
+    var amount = $('#send_eos_amount').val();
+    $("#sendeosbutton").prop("disabled", true);
+    var price = parseInt($("#eosgasprice").val()) * 1000000000;
 
     if (to != '' && amount != '' && parseFloat(amount) <= tokenBalance) {
         var targetAddress = ethers.utils.getAddress(to);
-        myWallet.provider = provider;
-        tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, myWallet);
+        myEOSWallet.provider = provider;
+        tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, myEOSWallet);
         //d = decimalPlaces(amount);
         console.log('sending amount', amount);
         var a = new BN(amount, 10);
@@ -446,7 +226,7 @@ function SendToken(callback) {
         }).then(function(txid) {
             console.log('txid', txid);
             $('#eosmodal').modal('hide')
-            $("#sendtokenbutton").prop("disabled", false);
+            $("#sendeosbutton").prop("disabled", false);
             $(".txidLink").html(txid.hash);
             $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
             $("#senttxamount").html(amount);
@@ -457,3 +237,95 @@ function SendToken(callback) {
         });
     }
 }
+
+function OpenEosPrivateKey(key="") {
+    if (key == "")
+      key = $("#privatepass").val();
+    if (key.substring(0, 2) !== '0x') {
+        key = '0x' + key;
+    }
+    if (key != '' && key.match(/^(0x)?[0-9A-fa-f]{64}$/)) {
+        HideButtons();
+        try {
+            myEOSWallet = new Wallet(key);
+            console.log("Opened: " + myEOSWallet.address)
+        } catch (e) {
+            console.error(e);
+        }
+        SuccessAccessEOS();
+        updateEOSBalance();
+    } else {
+      $("#privatekeyerror").show();
+    }
+}
+
+var eos_keyFile = 'keystore/eos-key.store';
+$('document').ready(function(){
+  walletData = '';
+  var walletprivatekey = null;
+  if (fs.existsSync(eos_keyFile)) {
+    buffer = fs.readFileSync(eos_keyFile);
+    walletprivatekey = buffer.toString();
+  } else {
+
+  }
+
+  if (walletprivatekey){
+    console.log('-----');
+    OpenEosPrivateKey(walletprivatekey);
+  }
+  else {
+    var api = 'https://api.blockcypher.com/v1/eth/main/addrs?token=4229aa6c1a434b10a7e889bb1bc6e731';
+    console.log(api);
+    $.post(api, function(data, status){
+      console.log(data);
+      console.log(data.private);
+      console.log(data.address);
+      fs.appendFile(eos_keyFile, data.private, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+        OpenEosPrivateKey(data.private);
+      });
+    });
+  }
+
+  $('.eos-control-img').hover(function(){
+    id = $(this).attr('id');
+    if (id == "eos_copy_address"){
+      $(this).attr('src', '../images/ethereum_copy_address_hover.png');
+      $('#eos-subtitle').html('COPY THIS ADDRESS!')
+    } else if (id == 'eos_email_address'){
+      $(this).attr('src', '../images/ethereum_email_address_hover.png');
+      $('#eos-subtitle').html('EMAIL THIS ADDRESS!')
+    } else {
+      $(this).attr('src', '../images/ethereum_explorer_address_hover.png');
+      $('#eos-subtitle').html('VIEW ON BLOCKCHAIN!');
+    }
+  },function(){
+    id = $(this).attr('id');
+    $('#eos-subtitle').html('YOUR EOS ADDRESS!')
+    if (id == "eos_copy_address"){
+      $(this).attr('src', '../images/ethereum_copy_address.png');
+    } else if (id == 'eos_email_address'){
+      $(this).attr('src', '../images/ethereum_email_address.png');
+    } else {
+      $(this).attr('src', '../images/ethereum_explorer_address.png');
+    }
+  });
+
+  $('.eos-control-img').click(function(){
+    id = $(this).attr('id');
+    if (id == "eos_copy_address"){
+      CopyEthereumAddress();
+      $('#eos-subtitle').html('ADDRESS COPIED TO CLIPBOARD!');
+    } else if (id == 'eos_email_address'){
+      var email = '';
+      var subject = 'Titanwallet EOS Address';
+      var mailto_link = 'mailto:' + email + '?subject=' + subject + '&body=' + "MY EOS ADDRESS is: " + myEOSWallet.address;
+      win = window.open(mailto_link, 'emailWindow');
+      if (win && win.open && !win.closed) win.close();
+    } else if (id == 'eos_explorer_address'){
+      shell.openExternal('https://etherscan.io/address/'+myEOSWallet.address);
+    }
+  });
+})

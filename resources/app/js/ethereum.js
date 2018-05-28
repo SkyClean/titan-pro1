@@ -179,7 +179,7 @@ function OpenEthereumNewWallet() {
 function updateBalance() {
     var address = myWallet.address;
     console.log('address', address);
-    $(".myaddress").html(address);
+    $("#ethereum_wallet_address").html(address);
 
     provider.getBalance(address).then(function(balance) {
         var etherString = ethers.utils.formatEther(balance);

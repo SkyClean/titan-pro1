@@ -33,9 +33,15 @@
         "electron-builder": "^19.11.1"
     },
     "dependencies": {
+        "bip39": "^2.5.0",
+        "bitcoinjs-lib": "^3.3.2",
+        "bitcore-wallet-client": "^6.7.5",
+        "blockchain.info": "^2.12.1",
         "clipboardy": "^1.1.4",
+        "crypto": "^1.0.1",
         "electron-default-menu": "^1.0.1",
         "ethereum-qr-code": "^0.3.0",
-        "ethers": "^2.1.1"
+        "ethers": "^2.1.1",
+        "nedb": "^1.8.0"
     }
 }

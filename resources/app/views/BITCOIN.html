@@ -33,7 +33,7 @@
         <h1 style="color:#ff9900;font-size:55px;margin:0px"><span id="bitcoin_balance" style="font-size:25px">0.00</span> <span style="padding-left:5px; font-size:20px; color:#ff9900">BTC</span></h1>
       </div>
       <div class="row" style="text-align:center;padding-top:10px;margin:0px">
-        <h1 id="bitcoin_balance_dollar" style="color:#fff;margin:0px"><span style="padding-left:5px; font-size:16px; color:#abaeb0">$</span>0.00<span style="padding-left:5px; font-size:16px; color:#abaeb0">USD</span></h1>
+        <h1 id="bitcoin_balance_dollar" style="color:#fff;margin:0px"><span style="padding-left:5px; font-size:16px; color:#abaeb0">$ </span><span id="bitcoin_balance_usd" style="color:white;font-size:25px"> 0.00</span><span style="padding-left:5px; font-size:16px; color:#abaeb0">USD</span></h1>
       </div>
       <div class="row" style="text-align:center;padding-top:30px;margin:0px">
         <div class="col-sm-6" style="text-align:right">
@@ -43,7 +43,7 @@
           <button class="btn btn-primary" style="width:150px;font-size:16px;background:#94641a;border:3px solid #ff9900" data-toggle="modal" data-target="#bitcoin_receive_modal">RECEIVE</button>
         </div>
       </div>
-      <div class="modal fade" id="bitcoin_send_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal fade" id="bitcoin_send_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:none">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <span style="position:absolute;cursor: pointer; right:20px; top:5px; font-size:20px" data-dismiss="modal">&#10005;</span>
@@ -61,7 +61,7 @@
 
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" id="send_bitcoin_amount" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="0.0" onkeyup="CheckBitCoinAvailable();">
+                            <input type="text" id="send_bitcoin_amount" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="0.0" oninput="CheckBitCoinAvailable(this.value);">
                             <span class="input-group-addon">BTC</span>
                         </div>
                         <!-- <p class="help-block"><u class="bitcoinspend">0.0</u> BTC Available</p> -->
@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="modal fade" id="bitcoin_receive_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal fade" id="bitcoin_receive_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:none">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <span style="position:absolute;cursor: pointer; right:20px; top:5px; font-size:20px" data-dismiss="modal">&#10005;</span>

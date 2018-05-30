@@ -77,11 +77,18 @@ function decrypt(key, password) {
 var utxos = null;
 function updateWallet(address){
   var c_blockexplorer = require('blockchain.info/blockexplorer');
+  var c_exchange = require('blockchain.info/exchange');
+
   c_blockexplorer.getUnspentOutputs(address).then((result) => {
-    console.log(result);
     utxos = result.unspent_outputs;
     coins = result.unspent_outputs.reduce((a, c) => a + c.value, 0) / BITCOIN_CONSTANTS.Bitcoin.Satoshis;
-    $('#bitcoin_balance').html(coins.tofixed(8));
+    console.log('coins', coins);
+    c_exchange.getTicker({ currency: 'USD' }).then( (r) => {
+      $total_usd = coins * r.sell;
+      $('#bitcoin_balance_usd').html($total_usd.toFixed(2));
+    });
+
+    $('#bitcoin_balance').html(coins.toFixed(8));
     $('#bitcoin_qr_code').html('');
     $('#bitcoin_qr_code').qrcode({width: 180,height: 180, text: address});
 
@@ -241,4 +248,18 @@ function SendBitcoin(){
       pushtx = require('blockchain.info/pushtx');
       c_pushtx = pushtx.pushtx;
       return c_pushtx(raw).then(result => result === BITCOIN_CONSTANTS.ReturnValues.TransactionSubmitted);
+}
+
+function CheckBitCoinAvailable(val){
+  console.log(val);
+  fee = $('#btctxfee').val();
+  balance = $('#bitcoin_balance').html();
+  total_amount = parseFloat(fee) + parseFloat(val);
+  console.log('balance', balance);
+  console.log('total_amount', total_amount);
+  if (parseFloat(total_amount) < parseFloat(balance)) {
+    $('#sendbtcbutton').prop('disabled', false);
+  } else {
+    $('#sendbtcbutton').prop('disabled', true);
+  }
 }

@@ -23,10 +23,6 @@ var privatekey;
 function CreateEthereumWallet(){
   var api = 'https://api.blockcypher.com/v1/eth/main/addrs?token=4229aa6c1a434b10a7e889bb1bc6e731';
   $.post(api, function(data, status){
-    console.log(data);
-    //etherUSD = parseFloat(data[0]['price_usd']);
-    console.log(data.private);
-    console.log(data.address);
     $("#created_addressArea").attr("class", "row");
     $('.created_myaddress').html('0x' + data.address);
     $('.created_privatekey').html(data.private);
@@ -62,7 +58,6 @@ UpdatePricing();
 
 function UpdatePricing() {
   EtherPrice();
-  StorjPrice();
 }
 
 
@@ -147,23 +142,32 @@ function QuitAppButton() {
 
 
 function OpenEthereumPrivateKey(key="") {
+
     if (key == "")
       key = $("#privatepass").val();
+
+
     if (key.substring(0, 2) !== '0x') {
         key = '0x' + key;
     }
-    if (key != '' && key.match(/^(0x)?[0-9A-fa-f]{64}$/)) {
+
+
+
+    if (key != '' && key.match(/^(0x)?[0-9A-Fa-f]{64}$/)) {
+
         HideButtons();
         try {
             myWallet = new Wallet(key);
             console.log("Opened: " + myWallet.address)
         } catch (e) {
+            console.log('ethereum open error');
             console.error(e);
         }
         SuccessAccess();
         updateBalance();
         UpdatePortfolio();
     } else {
+      console.log('ethereum private key 2', key);
       $("#privatekeyerror").show();
     }
 }
@@ -178,12 +182,11 @@ function OpenEthereumNewWallet() {
 
 function updateBalance() {
     var address = myWallet.address;
-    console.log('address', address);
     $("#ethereum_wallet_address").html(address);
 
     provider.getBalance(address).then(function(balance) {
         var etherString = ethers.utils.formatEther(balance);
-        console.log("ETH Balance: " + etherString);
+
         var n = parseFloat(etherString);
         var ethValue = n.toLocaleString(
             undefined, // use a string like 'en-US' to override browser locale
@@ -191,10 +194,13 @@ function updateBalance() {
                 minimumFractionDigits: 4
             }
         );
-        var messageEl = $('#eth_balance');
+        var messageEl = $('#ethereum_balance');
         var split = ethValue.split(".");
         ethBalance = parseFloat(ethValue);
-        messageEl.html(split[0] + ".<small>" + split[1] + "</small>");
+        messageEl.html(ethValue);
+
+        etherUSDValue = etherUSD * ethValue;
+        $('#ethereum_balance_dollar').html(etherUSDValue.toFixed(2));
     });
 }
 
@@ -211,12 +217,7 @@ function OpenKeystoreFile() {
 
 
 function SuccessAccess() {
-    // $(".options").hide();
-    // $(".walletInput").hide();
-    // $("#addressArea").attr("class", "row");
-    // $("#walletActions").attr("class", "row");
-    // $('.ethereum-div').hide();
-    // $('#ethereum-div-second').show();
+
     $('#ethereum_wallet_address').html(myWallet.address);
     const qr = new EthereumQRPlugin();
 
@@ -318,10 +319,11 @@ function SendEthereum(callback) {
             $("#senttxamount").html(amount);
             $("#txtoaddress").html(to);
             $("#txtype").html("ETH");
-            $('#trxsentModal').modal('show');
+            //$('#trxsentModal').modal('show');
             updateBalance();
         });
     }
+
 }
 
 function UpdateAvailableETH() {
@@ -334,27 +336,21 @@ $('document').ready(function(){
   walletData = '';
   var walletprivatekey = null;
   if (fs.existsSync(eth_keyFile)) {
-
     buffer = fs.readFileSync(eth_keyFile);
     walletprivatekey = buffer.toString();
-  } else {
-
   }
-  console.log(walletprivatekey);
+
   if (walletprivatekey){
-    console.log('-----');
     OpenEthereumPrivateKey(walletprivatekey);
   }
   else {
     var api = 'https://api.blockcypher.com/v1/eth/main/addrs?token=4229aa6c1a434b10a7e889bb1bc6e731';
-    console.log(api);
+
     $.post(api, function(data, status){
-      console.log(data);
-      console.log(data.private);
-      console.log(data.address);
+
       fs.appendFile(eth_keyFile, data.private, function (err) {
         if (err) throw err;
-        console.log('Saved!');
+
         OpenEthereumPrivateKey(data.private);
       });
     });

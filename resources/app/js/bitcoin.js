@@ -112,18 +112,21 @@ function updateWallet(address){
         $('#btctxfee').val(fee.toFixed(8));
       });
 }
-var mywif  = null;
-$('document').ready(function(){
-  var BTCWallet = [];
-  BTCWallet.Defaults = {
-      Encryption: 'aes-256-cbc',
-      Path: "m/44'/0'/0'/0/0",
-      DBFileName: 'bitcoin',
-  };
+var bitcoin_mywif  = null;
+var BTCWallet = [];
 
-  BTCWallet.Events = {
-    Updated: 'updated',
-  };
+BTCWallet.Defaults = {
+    Encryption: 'aes-256-cbc',
+    Path: "m/44'/0'/0'/0/0",
+    DBFileName: 'bitcoin',
+};
+
+BTCWallet.Events = {
+  Updated: 'updated',
+};
+
+$('document').ready(function(){
+
 
   db = new Datastore({ filename: `./bitcoin.db`, autoload: true });
 
@@ -143,7 +146,7 @@ $('document').ready(function(){
         var crypt = require('crypto');
         const cipher = crypt.createCipher(BTCWallet.Defaults.Encryption, 'titan');
         wif = cipher.update(wif, 'utf8', 'hex') + cipher.final('hex');
-        mywif = wif;
+        bitcoin_mywif = wif;
         const obj = {
             name: 'bitcoin',
             address: address,
@@ -151,12 +154,13 @@ $('document').ready(function(){
             network: network,
         };
         db.insert(obj);
-        $('#bitcoin_wallet_address').html(docs[0].address);
+        $('#bitcoin_wallet_address').html(address);
         updateWallet(address);
-        setInterval(updateWallet(docs[0].address), 5000);
+        setInterval(updateWallet(address), 5000);
       } else {
         console.log('bitcoin address', docs[0].address);
         $('#bitcoin_wallet_address').html(docs[0].address);
+        bitcoin_mywif = docs[0].wif;
         updateWallet(docs[0].address);
         setInterval(updateWallet(docs[0].address), 5000);
       }
@@ -213,16 +217,16 @@ function CopyBitcoinAddress() {
 
 
 function SendBitcoin(){
-      btc = $('#send_bitcoin_amount').html();
-      to_address = $('#send_bitcoin_to').html();
+      btc = $('#send_bitcoin_amount').val();
+      to_address = $('#send_bitcoin_to').val();
       fee = $('#btctxfee').val();
       fee = fee * BITCOIN_CONSTANTS.Bitcoin.Satoshis;
       address = $('#bitcoin_wallet_address').html();
       const satoshis = Math.round(btc * BITCOIN_CONSTANTS.Bitcoin.Satoshis);
 
       const network = 'bitcoin';
-
-      const txb = new bitcoin.TransactionBuilder(network);
+      var bitcoin = require('bitcoinjs-lib');
+      var txb = new bitcoin.TransactionBuilder(bitcoin.networks.bitcoin);
 
       let current = 0;
       for (const utx of utxos) {
@@ -233,21 +237,30 @@ function SendBitcoin(){
           if (current >= (satoshis + fee)) break;
       }
 
+      console.log('bitcoin', to_address, satoshis);
       txb.addOutput(to_address, satoshis);
 
       const change = current - (satoshis + fee);
       if (change) txb.addOutput(address, change);
 
 
-      const wif = mywif;
-      const key = bitcoin.ECPair.fromWIF(wif, network);
+      const wif = readDecrypted(bitcoin_mywif);
+      console.log('wif', wif);
+      const key = bitcoin.ECPair.fromWIF(wif);
 
       txb.sign(0, key);
 
       const raw = txb.build().toHex();
       pushtx = require('blockchain.info/pushtx');
       c_pushtx = pushtx.pushtx;
-      return c_pushtx(raw).then(result => result === BITCOIN_CONSTANTS.ReturnValues.TransactionSubmitted);
+      $('.modal').modal('hide');
+      return c_pushtx(raw).then(result => {result === BITCOIN_CONSTANTS.ReturnValues.TransactionSubmitted; console.log(result);});
+}
+
+function readDecrypted(wif) {
+    var crypto = require('crypto');
+    const cipher = crypto.createDecipher(BTCWallet.Defaults.Encryption, 'titan');
+    return cipher.update(wif, 'hex', 'utf8') + cipher.final('utf8');
 }
 
 function CheckBitCoinAvailable(val){

@@ -18,7 +18,7 @@ const globalShortcut = electron.globalShortcut
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({frame: true, width: 1200, height: 675})
+  mainWindow = new BrowserWindow({frame: true, width: 1340, height: 800})
 
   mainWindow.setResizable(true)
   mainWindow.setFullScreenable(false)

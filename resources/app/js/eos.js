@@ -133,7 +133,6 @@ function updateEOSBalance() {
 
         var split = atyxValue.split(".");
         eosBalance = parseFloat(atyxValue);
-        console.log('trueBal',result[0]);
         $(".eosspend").html(atyxValue)
         messageEl.html(split[0] + ".<small>" + split[1] + "</small>");
     });
@@ -248,7 +247,6 @@ function OpenEosPrivateKey(key="") {
         HideButtons();
         try {
             myEOSWallet = new Wallet(key);
-            console.log("Opened: " + myEOSWallet.address)
         } catch (e) {
             console.error(e);
         }

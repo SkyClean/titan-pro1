@@ -1,5 +1,661 @@
 <template>
-    <section class="section" id="section-exchanges">
-        22222222222222222222
-    </section>
-</template>
+  <LINK href="../css/exodus.css" rel="stylesheet" type="text/css" />
+  <section class="section" id="section-exchanges" style="padding-top:50px">
+    <div id="exodus-content">
+      <div id="exodus-content-exchange">
+        <div id="exodus-content-overlay-mask" class="hide-me"><div id="loader-container">
+          <div id="exchange-loader"></div>
+        </div>
+        <h1></h1>
+        <p></p>
+      </div>
+      <div id="exchange-center-line-top" class="exchange-center-line"></div>
+      <div id="exchange-give-swap-receive-container">
+        <div id="exchange-give">
+          <div id="exchange-receive-title" class="exchange-title">EXCHANGE</div>
+          <div class="Select has-value Select--single">
+            <div class="Select-control">
+              <input type="hidden" id="exchange_give_coin" class="exchange_coin" value="bitcoin" />
+              <input type="hidden" id="exchange_give_coin_symbol" class="exchange_coin_symbol" value="BTC" />
+              <span class="Select-multi-value-wrapper" id="react-select-2--value">
+                <div class="exchange-dropdown exodus-border-color-bitcoin">
+                  <div class="exchange-dropdown-image exodus-icon size32 logo-bitcoin"></div>
+                  <div class="exchange-dropdown-text exodus-color-bitcoin">
+                    <div class="exchange-dropdown-title">Bitcoin</div>
+                    <div class="exchange-dropdown-description">0.00 BTC</div>
+                  </div>
+                  <div class="exchange-dropdown-arrow">
+                    <svg class="exodus-color-fill-svg-bitcoin" width="12" height="9" viewBox="0 0 12 9" xmlns="https://www.w3.org/2000/svg">
+                      <title>Triangle</title>
+                      <path d="M6 9L0 0h12" fill-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div aria-expanded="false" aria-owns="" aria-activedescendant="react-select-2--value" aria-disabled="false" class="Select-input" role="combobox" tabindex="0" style="border: 0px; width: 1px; display: inline-block;">
+                </div>
+              </span>
+              <span class="Select-arrow-zone">
+                <span class="Select-arrow">
+                </span>
+              </span>
+              <div class="Select-menu-outer" style="display:none">
+                <div class="Select-menu" id="react-select-2--list" role="listbox" tabindex="-1">
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-bitcoin"></div>
+                    <div class="exchange-dropdown-text exodus-color-bitcoin">
+                      <div class="exchange-dropdown-title">Bitcoin</div>
+                      <div class="exchange-dropdown-description">0.00 BTC</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-bcash exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-bcash exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">Bitcoin Cash</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable) </div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-ethereum"></div>
+                    <div class="exchange-dropdown-text exodus-color-ethereum">
+                      <div class="exchange-dropdown-title">Ethereum</div>
+                      <div class="exchange-dropdown-description">0.00 ETH</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-eos exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-eos exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">EOS</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+
+                                    <div class="exchange-dropdown exchange-dropdown-menu-open">
+                                      <div class="exchange-dropdown-image exodus-icon size32 logo-litecoin exchange-dropdown-disabled"></div>
+                                      <div class="exchange-dropdown-text exodus-color-litecoin exchange-dropdown-disabled">
+                                        <div class="exchange-dropdown-title">Litecoin</div>
+                                        <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                                      </div>
+                                    </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-dash exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-dash exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">Dash</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="popover-buttons showbuttons">
+          <div id="popover-button-all" class="popover-button left active exodus-color-bitcoin exodus-border-color-bitcoin">All</div>
+          <div id="popover-button-half" class="popover-button ">Half</div>
+          <div id="popover-button-min" class="popover-button right ">Min</div>
+        </div>
+        <div class="exchange-amount-group exchange_give">
+          <div class="exodus-animate-all-point5 exchange-amount-coin exodus-color-bitcoin">
+            <input type="text" class="currency-input has-invalid exchange-amount" value="0.00"  oninput="exchange_input_amount(this)">
+            <div class="exchange-amount-units">BTC</div></div><div class="exodus-animate-all-point5 exchange-amount-baseline exodus-bg-color-bitcoin"></div>
+            <div class="exchange-amount-local-currency">
+              <input type="text" class="currency-input has-invalid exchange-amount" value="0.00">
+              <div class="exchange-amount-units">USD</div>
+            </div>
+          </div>
+        </div>
+        <div id="exchange-swap" tabindex="100">
+          <div id="exchange-center-line-swap-top" class="exchange-center-line"></div>
+          <svg id="exchange-swap-svg-arrows" class="disabled" width="32" height="32" viewBox="0 0 32 32" xmlns="https://www.w3.org/2000/svg">
+            <g fill="none" fill-rule="evenodd">
+              <path class="swap-to-right" d="M28.297 7.256l-4.73-5.126c-.448-.485-.448-1.268 0-1.766.448-.485 1.175-.485 1.623 0l6.493 7.04c.274.3.36.71.297 1.096.063.386-.023.796-.297 1.095l-6.493 7.04c-.448.486-1.175.486-1.624 0-.447-.484-.447-1.28 0-1.765l4.73-5.126H8.15C7.514 9.744 7 9.184 7 8.5c0-.684.514-1.244 1.148-1.244h20.15z" fill=" #FF9900"></path>
+              <path class="swap-to-left" d="M3.703 22.256l4.73-5.126c.448-.485.448-1.268 0-1.766-.448-.485-1.175-.485-1.623 0l-6.493 7.04c-.274.3-.36.71-.297 1.096-.063.386.023.796.297 1.095l6.493 7.04c.448.486 1.175.486 1.624 0 .447-.484.447-1.28 0-1.765l-4.73-5.126H23.85c.634 0 1.148-.56 1.148-1.244 0-.684-.514-1.244-1.148-1.244H3.702z" fill=" #D8D8D8"></path>
+            </g>
+          </svg>
+          <div class="exchange-center-line"></div>
+        </div>
+        <div id="exchange-receive">
+          <div id="exchange-receive-title" class="exchange-title">Receive</div>
+          <div class="Select has-value Select--single">
+            <div class="Select-control">
+              <input type="hidden" id="exchange_receive_coin" class="exchange_coin" value="ethereum" />
+              <input type="hidden" id="exchange_receive_coin_symbol" class="exchange_coin_symbol" value="ETH" />
+              <span class="Select-multi-value-wrapper" id="react-select-3--value">
+                <div class="exchange-dropdown exodus-border-color-ethereum">
+                  <div class="exchange-dropdown-image exodus-icon size32 logo-ethereum">
+                  </div>
+                  <div class="exchange-dropdown-text exodus-color-ethereum">
+                    <div class="exchange-dropdown-title">Ethereum</div>
+                    <div class="exchange-dropdown-description"><span>0.00</span> ETH</div>
+                  </div>
+                  <div class="exchange-dropdown-arrow">
+                    <svg class="exodus-color-fill-svg-ethereum" width="12" height="9" viewBox="0 0 12 9" xmlns="https://www.w3.org/2000/svg">
+                      <title>Triangle</title>
+                      <path d="M6 9L0 0h12" fill-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div aria-expanded="false" aria-owns="" aria-activedescendant="react-select-3--value" aria-disabled="false" class="Select-input" role="combobox" tabindex="0" style="border: 0px; width: 1px; display: inline-block;"></div>
+              </span>
+              <span class="Select-arrow-zone">
+                <span class="Select-arrow">
+                </span>
+              </span>
+              <div class="Select-menu-outer" style="display:none">
+                <div class="Select-menu" id="react-select-2--list" role="listbox" tabindex="-1">
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-bitcoin"></div>
+                    <div class="exchange-dropdown-text exodus-color-bitcoin">
+                      <div class="exchange-dropdown-title">Bitcoin</div>
+                      <div class="exchange-dropdown-description">0.00 BTC</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-bcash exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-bcash exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">Bitcoin Cash</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-ethereum"></div>
+                    <div class="exchange-dropdown-text exodus-color-ethereum">
+                      <div class="exchange-dropdown-title">Ethereum</div>
+                      <div class="exchange-dropdown-description">0.00 ETH</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-eos exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-eos exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">EOS</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-litecoin exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-litecoin exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">Litecoin</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+
+                  <div class="exchange-dropdown exchange-dropdown-menu-open">
+                    <div class="exchange-dropdown-image exodus-icon size32 logo-dash exchange-dropdown-disabled"></div>
+                    <div class="exchange-dropdown-text exodus-color-dash exchange-dropdown-disabled">
+                      <div class="exchange-dropdown-title">Dash</div>
+                      <div class="exchange-dropdown-description">(temporarily unavailable)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="exchange-amount-group exchange_receive">
+            <div class="exodus-animate-all-point5 exchange-amount-coin exodus-color-ethereum">
+              <input type="text" class="currency-input has-invalid exchange-amount" value="0.00">
+              <div class="exchange-amount-units">ETH</div>
+            </div>
+            <div class="exodus-animate-all-point5 exchange-amount-baseline exodus-bg-color-ethereum">
+            </div>
+            <div class="exchange-amount-local-currency">
+              <input type="text" class="currency-input has-invalid exchange-amount" value="0.00">
+              <div class="exchange-amount-units">USD</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="error-message-fixed-block" class="exchange-center-line">
+        <div id="error-message-container" class="exodus-animate-all-point5">
+          <div id="error-message">
+
+          </div>
+        </div>
+      </div><div id="exchange-confirmation-banner-container">
+        <div id="exchange-confirmation-banner">
+          <div id="exchange-give-confirm">
+            <div id="exchange-give-confirm-logo" class="exodus-animate-all-point5 exodus-icon size64 logo-bitcoin"></div>
+            <div id="exchange-give-confirm-text">
+              <div id="exchange-give-confirm-title" class="exchange-confirm-title">You are exchanging</div>
+              <div id="exchange-give-confirm-amount" class="exodus-animate-all exchange-confirm-amount exodus-color-bitcoin">
+                <span class="currency-text">
+                  <span class="amount-whole">0</span>
+                  <span class="amount-partial">.00</span>
+                  <span class="code">BTC</span>
+                </span>
+              </div>
+              <div id="exchange-give-confirm-local-currency" class="exchange-confirm-local-currency">
+                <span class="currency-text">
+                  <span class="symbol">$</span>
+                  <span class="amount-whole">0</span>
+                  <span class="amount-partial">.00</span></span></div>
+                 </div>
+               </div>
+               <div id="exchange-icon-link" class="exodus-icon"></div>
+               <div id="exchange-receive-confirm">
+                  <div id="exchange-receive-confirm-logo" class="exodus-animate-all-point5 exodus-icon size64 logo-ethereum"></div>
+                  <div id="exchange-receive-confirm-text">
+                    <div id="exchange-receive-confirm-title" class="exchange-confirm-title">You will receive</div>
+                    <div id="exchange-receive-confirm-amount" class="exodus-animate-all exchange-confirm-amount exodus-color-ethereum">
+                      <span class="currency-text">
+                        <span class="amount-whole">0</span>
+                        <span class="amount-partial">.00</span>
+                        <span class="code">ETH</span>
+                      </span>
+                    </div>
+                      <div id="exchange-receive-confirm-local-currency" class="exchange-confirm-local-currency">
+                        <span class="currency-text">
+                          <span class="symbol">$</span>
+                          <span class="amount-whole">0</span>
+                          <span class="amount-partial">.00</span>
+                        </span>
+                      </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+              <div id="exchange-center-line-under-confirmation" class="exchange-center-line"></div>
+              <div class="exchange-button-area">
+                <div id="erc20-error-banner" class="">
+                <div class="message">A small amount of Ethereum is required to start this exchange. Deposit <span id="exchange_coin_name">Ethereum</span> into your wallet then try again.</div>
+                <div class="button">How do I fix this?</div>
+                </div>
+                <div class="exchange-action-button">
+                  <div id="exchange--button-exchange" class="exchange--button exodus-animate-all-point5 exodus-button-gradient-left-color-bitcoin exodus-button-gradient-right-color-ethereum disabled">
+                    <p>Exchange</p>
+                  </div>
+                </div>
+              </div>
+              <div id="exchange-center-line-under-button" class="exchange-center-line">
+              </div>
+              <div id="exchange-center-line-bottom" class="exchange-center-line" style="height:100px">
+              </div>
+              <div id="exch-drawer">
+                <div id="exch-tab--history">Order History</div>
+                <div id="exch-tab--history-head">
+                  <div class="ex-head-from">Exchange</div>
+                  <div class="ex-head-to">Receive</div>
+                  <div class="ex-head-gain"></div>
+                  <div class="ex-head-action">Status</div>
+                </div>
+                <div id="exch-body--history">
+                  <div id="exch-loading">
+                    No exchanges
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="overflow" style="position:absolute;left:0px;top:0px; width:100%; height:100%; display:none"></div>
+        <script src="../js/exchange.js"></script>
+        <script>
+          $('.overflow').click(function(){
+            $('.Select-menu-outer').hide();
+            $('.overflow').hide();
+          });
+
+          $('.Select-multi-value-wrapper .exchange-dropdown').click(function(){
+            console.log('click');
+            $('.Select-menu-outer').hide();
+            $(this).closest(".Select-control").find('.Select-menu-outer').show();
+            $('.overflow').show();
+          });
+
+          $('.popover-button').click(function(){
+            $('.popover-button').removeClass('active');
+            $(".popover-button").removeClass(function (index, classNames) {
+                var current_classes = classNames.split(" "), // change the list into an array
+                classes_to_remove = []; // array of classes which are to be removed
+
+                $.each(current_classes, function (index, class_name) {
+                  // if the classname begins with bg add it to the classes_to_remove array
+                  if (/exodus-color.*/.test(class_name)) {
+                    classes_to_remove.push(class_name);
+                  }
+
+                  if (/exodus-border.*/.test(class_name)) {
+                    classes_to_remove.push(class_name);
+                  }
+                });
+                // turn the array back into a string
+                return classes_to_remove.join(" ");
+            });
+            receive_coin = $('#exchange_give_coin').val();
+            $(this).addClass('active');
+            $(this).addClass('exodus-color-'+receive_coin);
+            $(this).addClass('exodus-border-color-'+receive_coin);
+          });
+
+          $('.Select-menu .exchange-dropdown').click(function(){
+            if ($(this).find('.exchange-dropdown-text').hasClass('exchange-dropdown-disabled')){
+              return;
+            } else {
+              title = $(this).find('.exchange-dropdown-title').html();
+              console.log(title);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+
+                    if (/exodus-border.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+
+                    if (/exodus-border.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/logo.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+
+                  });
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color-fill-svg.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+
+                  });
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+              coin = '';
+              symbol = '';
+              if (title == 'Bitcoin'){
+                coin = 'bitcoin';
+                symbol = 'BTC';
+              } else if (title == 'Ethereum'){
+                coin = 'ethereum';
+                symbol = 'ETH';
+              } else if (title == 'EOS'){
+                coin = 'eos';
+                symbol = 'EOS';
+              }
+              $(this).closest('.Select-control').find('.exchange_coin').val(coin);
+              $(this).closest('.Select-control').find('.exchange_coin_symbol').val(symbol);
+
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').addClass('logo-'+coin);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').addClass('exodus-color-'+coin);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').addClass('exodus-border-color-'+coin);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-title').html(title);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-description').html('0.00 '+symbol);
+              $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').addClass('exodus-color-fill-svg-' + coin);
+              $('.Select-menu-outer').hide();
+              $('.overflow').hide();
+
+              $(".popover-button.active").removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+
+                    if (/exodus-border.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              give_coin = $('#exchange_give_coin').val();
+              give_coin_symbol =$('#exchange_give_coin_symbol').val();
+              console.log(give_coin);
+
+              receive_coin = $('#exchange_receive_coin').val();
+              receive_coin_symbol =$('#exchange_receive_coin_symbol').val();
+
+              $(".popover-button.active").addClass('exodus-color-'+give_coin);
+              $(".popover-button.active").addClass('exodus-border-color-'+give_coin);
+
+              $('.exchange-amount-group.exchange_receive .exchange-amount-coin .exchange-amount-units').html(receive_coin_symbol);
+              $('.exchange-amount-group.exchange_give .exchange-amount-coin .exchange-amount-units').html(give_coin_symbol);
+
+              $('.exchange-amount-group .exchange-amount-coin').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $('.exchange-amount-group .exchange-amount-baseline').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-bg-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $('.exchange-amount-group.exchange_receive .exchange-amount-coin').addClass('exodus-color-'+receive_coin);
+              $('.exchange-amount-group.exchange_receive .exchange-amount-baseline').addClass('exodus-bg-color-'+receive_coin);
+
+              $('.exchange-amount-group.exchange_give .exchange-amount-coin').addClass('exodus-color-'+give_coin);
+              $('.exchange-amount-group.exchange_give .exchange-amount-baseline').addClass('exodus-bg-color-'+give_coin);
+
+              $('#exchange-give-confirm-logo').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/logo.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+              $('#exchange-give-confirm-logo').addClass('logo-'+give_coin);
+              $('#exchange-receive-confirm-logo').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/logo.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $('.exchange-confirm-amount').removeClass(function (index, classNames) {
+                  var current_classes = classNames.split(" "), // change the list into an array
+                  classes_to_remove = []; // array of classes which are to be removed
+
+                  $.each(current_classes, function (index, class_name) {
+                    // if the classname begins with bg add it to the classes_to_remove array
+                    if (/exodus-color.*/.test(class_name)) {
+                      classes_to_remove.push(class_name);
+                    }
+                  });
+
+                  console.log(classes_to_remove);
+                  // turn the array back into a string
+                  return classes_to_remove.join(" ");
+              });
+
+              $('#exchange-receive-confirm-logo').addClass('logo-'+receive_coin);
+              $('#exchange-give-confirm-amount').addClass('exodus-color-'+give_coin);
+              $('#exchange-receive-confirm-amount').addClass('exodus-color-'+receive_coin);
+              $('#exchange-give-confirm-amount .code').html(give_coin_symbol);
+              $('#exchange-receive-confirm-amount .code').html(receive_coin_symbol);
+            }
+          });
+
+          var shapeshift = require('shapeshift.io')
+          shapeshift.coins(function (err, coinData) {
+            console.dir('shapeshift',coinData);
+            /*
+            { BTC:
+            { name: 'Bitcoin',
+            symbol: 'BTC',
+            image: 'https://shapeshift.io/images/coins/bitcoin.png',
+            status: 'available' },           */
+          });
+
+
+
+          var shapeshift_down = true;
+          function updateBalances(){
+            $('#exchange-give .exchange-dropdown-title').each(function(){
+              coin = '';
+              title = $(this).html();
+              if (title == 'Bitcoin'){
+                coin = 'bitcoin';
+                symbol = 'BTC';
+              } else if (title == 'Ethereum'){
+                coin = 'ethereum';
+                symbol = 'ETH';
+              } else {
+                return;
+              }
+
+              give_coin_balance = $('#bitcoin_balance').html();
+              $(this).closest('.exchange-dropdown-text').find('.exchange-dropdown-description').html(give_coin_balance + ' ' + symbol);
+            });
+
+            $('#exchange-receive .exchange-dropdown-title').each(function(){
+              var coin = '';
+              title = $(this).html();
+              if (title == 'Bitcoin'){
+                coin = 'bitcoin';
+                symbol = 'BTC';
+              } else if (title == 'Ethereum'){
+                coin = 'ethereum';
+                symbol = 'ETH';
+              }  else {
+                return;
+              }
+              console.log('coin', coin);
+              give_symbol = $('#exchange_give_coin_symbol').val();
+              if (give_symbol == symbol){
+                $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + ' 1 '+ ' ' + symbol);
+                return;
+              }
+              pair = give_symbol.toLowerCase() + '_' + symbol.toLowerCase();
+              obj = $(this);
+
+              $.get('https://shapeshift.io/rate/'+pair, function(data, status){
+                console.log(pair, data, status);
+                if (status == 'success') {
+                  $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + data.rate + ' ' + symbol);
+                }
+              });
+            });
+          }
+
+          setInterval(updateBalances, 5000);
+
+
+          function exchange_input_amount(obj){
+            amount = $(obj).val();
+            console.log(amount);
+            give_currency = $('.exchange_give .exchange-amount-coin .exchange-amount-units').html();
+            receive_currency = $('.exchange_receive .exchange-amount-coin .exchange-amount-units').html();
+
+            give_amount = amount;
+
+            $('#exchange-give-confirm .amount-whole').html(Math.trunc(give_amount));
+
+            decimal_give_amount = parseFloat(give_amount) - Math.trunc(give_amount);
+            decimal_give_amount = decimal_give_amount.toString().substr(1);
+            $('#exchange-give-confirm .amount-partial').html(decimal_give_amount);
+
+
+            var pair = give_currency.toLowerCase() + '_' + receive_currency.toLowerCase();
+
+            $.get('https://shapeshift.io/rate/'+pair, function(data, status){
+              receive_amount = give_amount * data.rate;
+              $('.exchange_receive .exchange-amount').val(receive_amount);
+              $('#exchange-receive-confirm .amount-whole').html(Math.trunc(receive_amount));
+              decimal_receive_amount = parseFloat(receive_amount) - Math.trunc(receive_amount);
+              decimal_receive_amount = decimal_receive_amount.toString().substr(1);
+              $('#exchange-receive-confirm .amount-partial').html(decimal_receive_amount);
+            });
+          }
+
+          var is_opened = false;
+          $('#exch-tab--history').click(function(){
+                console.log('clicked');
+                is_opened = !is_opened;
+              if (is_opened){
+                $('#exch-drawer').addClass('open');
+              } else {
+                $('#exch-drawer').removeClass('open');
+              }
+          });
+        </script>
+      </template>

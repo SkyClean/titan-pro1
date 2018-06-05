@@ -72,7 +72,7 @@ function updateLTCWallet(address){
   console.log('updateltcwallet', address);
   $.get('https://api.blockcypher.com/v1/ltc/main/addrs/'+address+'/balance') .then(function(data) {
     console.log('litecoin balance', data.balance);
-    ltc_balance = data.balance;
+    ltc_balance = data.balance / LITECOIN_CONSTANTS.Litecoin.Satoshis;
     $('#litecoin_balance').html(ltc_balance.toFixed(8));
     $('#litecoin_qr_code').html('');
     $('#litecoin_qr_code').qrcode({width: 180,height: 180, text: address});

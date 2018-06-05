@@ -89,7 +89,7 @@ function updateLTCWallet(address){
     lastest_url = data.latest_url;
     console.log('lastest_url', lastest_url);
     $.get(lastest_url).then(function(blockdata) {
-      txNormalFeeKB = 450;
+      txNormalFeeKB = 1000;
       console.log(blockdata);
       console.log('block', blockdata.fees, blockdata.size);
       txfeeperbyte = blockdata.fees / blockdata.size;
@@ -241,7 +241,7 @@ function SendLitecoin(){
       ltc = $('#send_litecoin_amount').val();
       to_address = $('#send_litecoin_to').val();
       fee = $('#ltctxfee').val();
-      var fee = fee * LITECOIN_CONSTANTS.Litecoin.Satoshis;
+      var fee = parseInt(fee * LITECOIN_CONSTANTS.Litecoin.Satoshis);
       var address = $('#litecoin_wallet_address').html();
       const satoshis = Math.round(ltc * LITECOIN_CONSTANTS.Litecoin.Satoshis);
 

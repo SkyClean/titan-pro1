@@ -297,365 +297,365 @@
         <div class="overflow" style="position:absolute;left:0px;top:0px; width:100%; height:100%; display:none"></div>
         <script src="../js/exchange.js"></script>
         <script>
-          $('.overflow').click(function(){
-            $('.Select-menu-outer').hide();
-            $('.overflow').hide();
-          });
-
-          $('.Select-multi-value-wrapper .exchange-dropdown').click(function(){
-            console.log('click');
-            $('.Select-menu-outer').hide();
-            $(this).closest(".Select-control").find('.Select-menu-outer').show();
-            $('.overflow').show();
-          });
-
-          $('.popover-button').click(function(){
-            $('.popover-button').removeClass('active');
-            $(".popover-button").removeClass(function (index, classNames) {
-                var current_classes = classNames.split(" "), // change the list into an array
-                classes_to_remove = []; // array of classes which are to be removed
-
-                $.each(current_classes, function (index, class_name) {
-                  // if the classname begins with bg add it to the classes_to_remove array
-                  if (/exodus-color.*/.test(class_name)) {
-                    classes_to_remove.push(class_name);
-                  }
-
-                  if (/exodus-border.*/.test(class_name)) {
-                    classes_to_remove.push(class_name);
-                  }
-                });
-                // turn the array back into a string
-                return classes_to_remove.join(" ");
-            });
-            receive_coin = $('#exchange_give_coin').val();
-            $(this).addClass('active');
-            $(this).addClass('exodus-color-'+receive_coin);
-            $(this).addClass('exodus-border-color-'+receive_coin);
-          });
-
-          $('.Select-menu .exchange-dropdown').click(function(){
-            if ($(this).find('.exchange-dropdown-text').hasClass('exchange-dropdown-disabled')){
-              return;
-            } else {
-              title = $(this).find('.exchange-dropdown-title').html();
-              console.log(title);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-
-                    if (/exodus-border.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-
-                    if (/exodus-border.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/logo.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-
-                  });
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color-fill-svg.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-
-                  });
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-              coin = '';
-              symbol = '';
-              if (title == 'Bitcoin'){
-                coin = 'bitcoin';
-                symbol = 'BTC';
-              } else if (title == 'Ethereum'){
-                coin = 'ethereum';
-                symbol = 'ETH';
-              } else if (title == 'EOS'){
-                coin = 'eos';
-                symbol = 'EOS';
-              }
-              $(this).closest('.Select-control').find('.exchange_coin').val(coin);
-              $(this).closest('.Select-control').find('.exchange_coin_symbol').val(symbol);
-
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').addClass('logo-'+coin);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').addClass('exodus-color-'+coin);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').addClass('exodus-border-color-'+coin);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-title').html(title);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-description').html('0.00 '+symbol);
-              $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').addClass('exodus-color-fill-svg-' + coin);
-              $('.Select-menu-outer').hide();
-              $('.overflow').hide();
-
-              $(".popover-button.active").removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-
-                    if (/exodus-border.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              give_coin = $('#exchange_give_coin').val();
-              give_coin_symbol =$('#exchange_give_coin_symbol').val();
-              console.log(give_coin);
-
-              receive_coin = $('#exchange_receive_coin').val();
-              receive_coin_symbol =$('#exchange_receive_coin_symbol').val();
-
-              $(".popover-button.active").addClass('exodus-color-'+give_coin);
-              $(".popover-button.active").addClass('exodus-border-color-'+give_coin);
-
-              $('.exchange-amount-group.exchange_receive .exchange-amount-coin .exchange-amount-units').html(receive_coin_symbol);
-              $('.exchange-amount-group.exchange_give .exchange-amount-coin .exchange-amount-units').html(give_coin_symbol);
-
-              $('.exchange-amount-group .exchange-amount-coin').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $('.exchange-amount-group .exchange-amount-baseline').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-bg-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $('.exchange-amount-group.exchange_receive .exchange-amount-coin').addClass('exodus-color-'+receive_coin);
-              $('.exchange-amount-group.exchange_receive .exchange-amount-baseline').addClass('exodus-bg-color-'+receive_coin);
-
-              $('.exchange-amount-group.exchange_give .exchange-amount-coin').addClass('exodus-color-'+give_coin);
-              $('.exchange-amount-group.exchange_give .exchange-amount-baseline').addClass('exodus-bg-color-'+give_coin);
-
-              $('#exchange-give-confirm-logo').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/logo.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-              $('#exchange-give-confirm-logo').addClass('logo-'+give_coin);
-              $('#exchange-receive-confirm-logo').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/logo.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $('.exchange-confirm-amount').removeClass(function (index, classNames) {
-                  var current_classes = classNames.split(" "), // change the list into an array
-                  classes_to_remove = []; // array of classes which are to be removed
-
-                  $.each(current_classes, function (index, class_name) {
-                    // if the classname begins with bg add it to the classes_to_remove array
-                    if (/exodus-color.*/.test(class_name)) {
-                      classes_to_remove.push(class_name);
-                    }
-                  });
-
-                  console.log(classes_to_remove);
-                  // turn the array back into a string
-                  return classes_to_remove.join(" ");
-              });
-
-              $('#exchange-receive-confirm-logo').addClass('logo-'+receive_coin);
-              $('#exchange-give-confirm-amount').addClass('exodus-color-'+give_coin);
-              $('#exchange-receive-confirm-amount').addClass('exodus-color-'+receive_coin);
-              $('#exchange-give-confirm-amount .code').html(give_coin_symbol);
-              $('#exchange-receive-confirm-amount .code').html(receive_coin_symbol);
-            }
-          });
-
-          var shapeshift = require('shapeshift.io')
-          shapeshift.coins(function (err, coinData) {
-            console.dir('shapeshift',coinData);
-            /*
-            { BTC:
-            { name: 'Bitcoin',
-            symbol: 'BTC',
-            image: 'https://shapeshift.io/images/coins/bitcoin.png',
-            status: 'available' },           */
-          });
-
-
-
-          var shapeshift_down = true;
-          function updateBalances(){
-            $('#exchange-give .exchange-dropdown-title').each(function(){
-              coin = '';
-              title = $(this).html();
-              if (title == 'Bitcoin'){
-                coin = 'bitcoin';
-                symbol = 'BTC';
-              } else if (title == 'Ethereum'){
-                coin = 'ethereum';
-                symbol = 'ETH';
-              } else {
-                return;
-              }
-
-              give_coin_balance = $('#bitcoin_balance').html();
-              $(this).closest('.exchange-dropdown-text').find('.exchange-dropdown-description').html(give_coin_balance + ' ' + symbol);
-            });
-
-            $('#exchange-receive .exchange-dropdown-title').each(function(){
-              var coin = '';
-              title = $(this).html();
-              if (title == 'Bitcoin'){
-                coin = 'bitcoin';
-                symbol = 'BTC';
-              } else if (title == 'Ethereum'){
-                coin = 'ethereum';
-                symbol = 'ETH';
-              }  else {
-                return;
-              }
-              console.log('coin', coin);
-              give_symbol = $('#exchange_give_coin_symbol').val();
-              if (give_symbol == symbol){
-                $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + ' 1 '+ ' ' + symbol);
-                return;
-              }
-              pair = give_symbol.toLowerCase() + '_' + symbol.toLowerCase();
-              obj = $(this);
-
-              $.get('https://shapeshift.io/rate/'+pair, function(data, status){
-                console.log(pair, data, status);
-                if (status == 'success') {
-                  $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + data.rate + ' ' + symbol);
-                }
-              });
-            });
-          }
-
-          setInterval(updateBalances, 5000);
-
-
-          function exchange_input_amount(obj){
-            amount = $(obj).val();
-            console.log(amount);
-            give_currency = $('.exchange_give .exchange-amount-coin .exchange-amount-units').html();
-            receive_currency = $('.exchange_receive .exchange-amount-coin .exchange-amount-units').html();
-
-            give_amount = amount;
-
-            $('#exchange-give-confirm .amount-whole').html(Math.trunc(give_amount));
-
-            decimal_give_amount = parseFloat(give_amount) - Math.trunc(give_amount);
-            decimal_give_amount = decimal_give_amount.toString().substr(1);
-            $('#exchange-give-confirm .amount-partial').html(decimal_give_amount);
-
-
-            var pair = give_currency.toLowerCase() + '_' + receive_currency.toLowerCase();
-
-            $.get('https://shapeshift.io/rate/'+pair, function(data, status){
-              receive_amount = give_amount * data.rate;
-              $('.exchange_receive .exchange-amount').val(receive_amount);
-              $('#exchange-receive-confirm .amount-whole').html(Math.trunc(receive_amount));
-              decimal_receive_amount = parseFloat(receive_amount) - Math.trunc(receive_amount);
-              decimal_receive_amount = decimal_receive_amount.toString().substr(1);
-              $('#exchange-receive-confirm .amount-partial').html(decimal_receive_amount);
-            });
-          }
-
-          var is_opened = false;
-          $('#exch-tab--history').click(function(){
-                console.log('clicked');
-                is_opened = !is_opened;
-              if (is_opened){
-                $('#exch-drawer').addClass('open');
-              } else {
-                $('#exch-drawer').removeClass('open');
-              }
-          });
+          // $('.overflow').click(function(){
+          //   $('.Select-menu-outer').hide();
+          //   $('.overflow').hide();
+          // });
+          //
+          // $('.Select-multi-value-wrapper .exchange-dropdown').click(function(){
+          //   console.log('click');
+          //   $('.Select-menu-outer').hide();
+          //   $(this).closest(".Select-control").find('.Select-menu-outer').show();
+          //   $('.overflow').show();
+          // });
+          //
+          // $('.popover-button').click(function(){
+          //   $('.popover-button').removeClass('active');
+          //   $(".popover-button").removeClass(function (index, classNames) {
+          //       var current_classes = classNames.split(" "), // change the list into an array
+          //       classes_to_remove = []; // array of classes which are to be removed
+          //
+          //       $.each(current_classes, function (index, class_name) {
+          //         // if the classname begins with bg add it to the classes_to_remove array
+          //         if (/exodus-color.*/.test(class_name)) {
+          //           classes_to_remove.push(class_name);
+          //         }
+          //
+          //         if (/exodus-border.*/.test(class_name)) {
+          //           classes_to_remove.push(class_name);
+          //         }
+          //       });
+          //       // turn the array back into a string
+          //       return classes_to_remove.join(" ");
+          //   });
+          //   receive_coin = $('#exchange_give_coin').val();
+          //   $(this).addClass('active');
+          //   $(this).addClass('exodus-color-'+receive_coin);
+          //   $(this).addClass('exodus-border-color-'+receive_coin);
+          // });
+          //
+          // $('.Select-menu .exchange-dropdown').click(function(){
+          //   if ($(this).find('.exchange-dropdown-text').hasClass('exchange-dropdown-disabled')){
+          //     return;
+          //   } else {
+          //     title = $(this).find('.exchange-dropdown-title').html();
+          //     console.log(title);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //
+          //           if (/exodus-border.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //
+          //           if (/exodus-border.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/logo.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //
+          //         });
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color-fill-svg.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //
+          //         });
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //     coin = '';
+          //     symbol = '';
+          //     if (title == 'Bitcoin'){
+          //       coin = 'bitcoin';
+          //       symbol = 'BTC';
+          //     } else if (title == 'Ethereum'){
+          //       coin = 'ethereum';
+          //       symbol = 'ETH';
+          //     } else if (title == 'EOS'){
+          //       coin = 'eos';
+          //       symbol = 'EOS';
+          //     }
+          //     $(this).closest('.Select-control').find('.exchange_coin').val(coin);
+          //     $(this).closest('.Select-control').find('.exchange_coin_symbol').val(symbol);
+          //
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-image').addClass('logo-'+coin);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-text').addClass('exodus-color-'+coin);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown').addClass('exodus-border-color-'+coin);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-title').html(title);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper .exchange-dropdown-description').html('0.00 '+symbol);
+          //     $(this).closest('.Select-control').find('.Select-multi-value-wrapper svg').addClass('exodus-color-fill-svg-' + coin);
+          //     $('.Select-menu-outer').hide();
+          //     $('.overflow').hide();
+          //
+          //     $(".popover-button.active").removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //
+          //           if (/exodus-border.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     give_coin = $('#exchange_give_coin').val();
+          //     give_coin_symbol =$('#exchange_give_coin_symbol').val();
+          //     console.log(give_coin);
+          //
+          //     receive_coin = $('#exchange_receive_coin').val();
+          //     receive_coin_symbol =$('#exchange_receive_coin_symbol').val();
+          //
+          //     $(".popover-button.active").addClass('exodus-color-'+give_coin);
+          //     $(".popover-button.active").addClass('exodus-border-color-'+give_coin);
+          //
+          //     $('.exchange-amount-group.exchange_receive .exchange-amount-coin .exchange-amount-units').html(receive_coin_symbol);
+          //     $('.exchange-amount-group.exchange_give .exchange-amount-coin .exchange-amount-units').html(give_coin_symbol);
+          //
+          //     $('.exchange-amount-group .exchange-amount-coin').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $('.exchange-amount-group .exchange-amount-baseline').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-bg-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $('.exchange-amount-group.exchange_receive .exchange-amount-coin').addClass('exodus-color-'+receive_coin);
+          //     $('.exchange-amount-group.exchange_receive .exchange-amount-baseline').addClass('exodus-bg-color-'+receive_coin);
+          //
+          //     $('.exchange-amount-group.exchange_give .exchange-amount-coin').addClass('exodus-color-'+give_coin);
+          //     $('.exchange-amount-group.exchange_give .exchange-amount-baseline').addClass('exodus-bg-color-'+give_coin);
+          //
+          //     $('#exchange-give-confirm-logo').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/logo.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //     $('#exchange-give-confirm-logo').addClass('logo-'+give_coin);
+          //     $('#exchange-receive-confirm-logo').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/logo.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $('.exchange-confirm-amount').removeClass(function (index, classNames) {
+          //         var current_classes = classNames.split(" "), // change the list into an array
+          //         classes_to_remove = []; // array of classes which are to be removed
+          //
+          //         $.each(current_classes, function (index, class_name) {
+          //           // if the classname begins with bg add it to the classes_to_remove array
+          //           if (/exodus-color.*/.test(class_name)) {
+          //             classes_to_remove.push(class_name);
+          //           }
+          //         });
+          //
+          //         console.log(classes_to_remove);
+          //         // turn the array back into a string
+          //         return classes_to_remove.join(" ");
+          //     });
+          //
+          //     $('#exchange-receive-confirm-logo').addClass('logo-'+receive_coin);
+          //     $('#exchange-give-confirm-amount').addClass('exodus-color-'+give_coin);
+          //     $('#exchange-receive-confirm-amount').addClass('exodus-color-'+receive_coin);
+          //     $('#exchange-give-confirm-amount .code').html(give_coin_symbol);
+          //     $('#exchange-receive-confirm-amount .code').html(receive_coin_symbol);
+          //   }
+          // });
+          //
+          // var shapeshift = require('shapeshift.io')
+          // shapeshift.coins(function (err, coinData) {
+          //   console.dir('shapeshift',coinData);
+          //   /*
+          //   { BTC:
+          //   { name: 'Bitcoin',
+          //   symbol: 'BTC',
+          //   image: 'https://shapeshift.io/images/coins/bitcoin.png',
+          //   status: 'available' },           */
+          // });
+          //
+          //
+          //
+          // var shapeshift_down = true;
+          // function updateBalances(){
+          //   $('#exchange-give .exchange-dropdown-title').each(function(){
+          //     coin = '';
+          //     title = $(this).html();
+          //     if (title == 'Bitcoin'){
+          //       coin = 'bitcoin';
+          //       symbol = 'BTC';
+          //     } else if (title == 'Ethereum'){
+          //       coin = 'ethereum';
+          //       symbol = 'ETH';
+          //     } else {
+          //       return;
+          //     }
+          //
+          //     give_coin_balance = $('#bitcoin_balance').html();
+          //     $(this).closest('.exchange-dropdown-text').find('.exchange-dropdown-description').html(give_coin_balance + ' ' + symbol);
+          //   });
+          //
+          //   $('#exchange-receive .exchange-dropdown-title').each(function(){
+          //     var coin = '';
+          //     title = $(this).html();
+          //     if (title == 'Bitcoin'){
+          //       coin = 'bitcoin';
+          //       symbol = 'BTC';
+          //     } else if (title == 'Ethereum'){
+          //       coin = 'ethereum';
+          //       symbol = 'ETH';
+          //     }  else {
+          //       return;
+          //     }
+          //     console.log('coin', coin);
+          //     give_symbol = $('#exchange_give_coin_symbol').val();
+          //     if (give_symbol == symbol){
+          //       $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + ' 1 '+ ' ' + symbol);
+          //       return;
+          //     }
+          //     pair = give_symbol.toLowerCase() + '_' + symbol.toLowerCase();
+          //     obj = $(this);
+          //
+          //     $.get('https://shapeshift.io/rate/'+pair, function(data, status){
+          //       console.log(pair, data, status);
+          //       if (status == 'success') {
+          //         $('#exchange-receive .exchange-dropdown-text.exodus-color-'+coin).find('.exchange-dropdown-description').html('1 ' + give_symbol + ' = ' + data.rate + ' ' + symbol);
+          //       }
+          //     });
+          //   });
+          // }
+          //
+          // setInterval(updateBalances, 5000);
+          //
+          //
+          // function exchange_input_amount(obj){
+          //   amount = $(obj).val();
+          //   console.log(amount);
+          //   give_currency = $('.exchange_give .exchange-amount-coin .exchange-amount-units').html();
+          //   receive_currency = $('.exchange_receive .exchange-amount-coin .exchange-amount-units').html();
+          //
+          //   give_amount = amount;
+          //
+          //   $('#exchange-give-confirm .amount-whole').html(Math.trunc(give_amount));
+          //
+          //   decimal_give_amount = parseFloat(give_amount) - Math.trunc(give_amount);
+          //   decimal_give_amount = decimal_give_amount.toString().substr(1);
+          //   $('#exchange-give-confirm .amount-partial').html(decimal_give_amount);
+          //
+          //
+          //   var pair = give_currency.toLowerCase() + '_' + receive_currency.toLowerCase();
+          //
+          //   $.get('https://shapeshift.io/rate/'+pair, function(data, status){
+          //     receive_amount = give_amount * data.rate;
+          //     $('.exchange_receive .exchange-amount').val(receive_amount);
+          //     $('#exchange-receive-confirm .amount-whole').html(Math.trunc(receive_amount));
+          //     decimal_receive_amount = parseFloat(receive_amount) - Math.trunc(receive_amount);
+          //     decimal_receive_amount = decimal_receive_amount.toString().substr(1);
+          //     $('#exchange-receive-confirm .amount-partial').html(decimal_receive_amount);
+          //   });
+          // }
+          //
+          // var is_opened = false;
+          // $('#exch-tab--history').click(function(){
+          //       console.log('clicked');
+          //       is_opened = !is_opened;
+          //     if (is_opened){
+          //       $('#exch-drawer').addClass('open');
+          //     } else {
+          //       $('#exch-drawer').removeClass('open');
+          //     }
+          // });
         </script>
       </template>

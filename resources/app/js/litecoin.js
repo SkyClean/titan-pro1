@@ -68,14 +68,16 @@ function hash(password) {
 
 var utxos = null;
 var ltcUSD = 0;
-function updateLTCWallet(address){
-  console.log('updateltcwallet', address);
-  $.get('https://api.blockcypher.com/v1/ltc/main/addrs/'+address+'/balance') .then(function(data) {
+var address_lite = 0;
+function updateLTCWallet(){
+  if (address_lite == 0) return;
+  console.log('updateltcwallet', address_lite);
+  $.get('https://api.blockcypher.com/v1/ltc/main/addrs/'+address_lite+'/balance?token=4229aa6c1a434b10a7e889bb1bc6e731') .then(function(data) {
     console.log('litecoin balance', data.final_balance);
-    ltc_balance = data.balance / LITECOIN_CONSTANTS.Litecoin.Satoshis;
+    ltc_balance = data.final_balance / LITECOIN_CONSTANTS.Litecoin.Satoshis;
     $('#litecoin_balance').html(ltc_balance.toFixed(8));
     $('#litecoin_qr_code').html('');
-    $('#litecoin_qr_code').qrcode({width: 180,height: 180, text: address});
+    $('#litecoin_qr_code').qrcode({width: 180,height: 180, text: address_lite});
 
     var api = "https://api.coinmarketcap.com/v1/ticker/litecoin/";
     $.get(api, function(data, status){
@@ -85,15 +87,15 @@ function updateLTCWallet(address){
     });
   });
 
-  $.get('https://api.blockcypher.com/v1/btc/main').then(function(data) {
+  $.get('https://api.blockcypher.com/v1/ltc/main?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(data) {
     lastest_url = data.latest_url;
     console.log('lastest_url', lastest_url);
-    $.get(lastest_url).then(function(blockdata) {
+    $.get(lastest_url+'?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(blockdata) {
       txNormalFeeKB = 1000;
       console.log(blockdata);
       console.log('block', blockdata.fees, blockdata.size);
       txfeeperbyte = blockdata.fees / blockdata.size;
-      fee = txNormalFeeKB * txfeeperbyte * 5 / LITECOIN_CONSTANTS.Litecoin.Satoshis;
+      fee = txNormalFeeKB * txfeeperbyte / LITECOIN_CONSTANTS.Litecoin.Satoshis;
       $('#ltctxfee').val(fee.toFixed(8));
     });
   });
@@ -110,7 +112,7 @@ LTCWallet.Defaults = {
 LTCWallet.Events = {
   Updated: 'updated',
 };
-var address_lite = 0;
+
 $('document').ready(function(){
   db_litecoin = new Datastore({ filename: `./litecoin.db`, autoload: true });
   db_litecoin.find({'network':'litecoin'}, (err, docs) => {
@@ -138,16 +140,18 @@ $('document').ready(function(){
         };
         db_litecoin.insert(obj);
         $('#litecoin_wallet_address').html(address_lite);
-        updateLTCWallet(address_lite);
-        setInterval(updateLTCWallet(address_lite), 3000);
+        updateLTCWallet();
+        setInterval(updateLTCWallet, 3000);
       } else {
         console.log('litecoin address', docs[0].address);
         $('#litecoin_wallet_address').html(docs[0].address);
         litecoin_mywif = docs[0].wif;
         address_lite = docs[0].address;
-        updateLTCWallet(address_lite);
-        setInterval(updateLTCWallet(address_lite), 3000);
+        updateLTCWallet();
+        setInterval(updateLTCWallet, 3000);
       }
+
+
   });
 
 
@@ -241,7 +245,7 @@ function SendLitecoin(){
       ltc = $('#send_litecoin_amount').val();
       to_address = $('#send_litecoin_to').val();
       fee = $('#ltctxfee').val();
-      var fee = parseInt(fee * LITECOIN_CONSTANTS.Litecoin.Satoshis);
+      var fee = fee * LITECOIN_CONSTANTS.Litecoin.Satoshis;
       var address = $('#litecoin_wallet_address').html();
       const satoshis = Math.round(ltc * LITECOIN_CONSTANTS.Litecoin.Satoshis);
 

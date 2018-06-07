@@ -72,33 +72,44 @@ var address_lite = 0;
 function updateLTCWallet(){
   if (address_lite == 0) return;
   console.log('updateltcwallet', address_lite);
-  $.get('https://api.blockcypher.com/v1/ltc/main/addrs/'+address_lite+'/balance?token=4229aa6c1a434b10a7e889bb1bc6e731') .then(function(data) {
-    console.log('litecoin balance', data.final_balance);
-    ltc_balance = data.final_balance / LITECOIN_CONSTANTS.Litecoin.Satoshis;
-    $('#litecoin_balance').html(ltc_balance.toFixed(8));
-    $('#litecoin_qr_code').html('');
-    $('#litecoin_qr_code').qrcode({width: 180,height: 180, text: address_lite});
+  getUTXOs(address_lite)
+    .then((utxos) => {
 
-    var api = "https://api.coinmarketcap.com/v1/ticker/litecoin/";
-    $.get(api, function(data, status){
-      ltcUSD = parseFloat(data[0]['price_usd']);
-      $total_usd =ltc_balance * ltcUSD;
-      $('#litecoin_balance_usd').html($total_usd.toFixed(2));
-    });
+      let current = 0;
+      for (var i = 0; i < utxos.length; i++) {
+        current +=utxos[i]['satoshis'];
+      }
+      ltc_balance = current / LITECOIN_CONSTANTS.Litecoin.Satoshis;
+
+      $('#litecoin_balance').html(ltc_balance.toFixed(8));
+      $('#litecoin_qr_code').html('');
+      $('#litecoin_qr_code').qrcode({width: 180,height: 180, text: address_lite});
+
+      var api = "https://api.coinmarketcap.com/v1/ticker/litecoin/";
+      $.get(api, function(data, status){
+        ltcUSD = parseFloat(data[0]['price_usd']);
+        $total_usd =ltc_balance * ltcUSD;
+        $('#litecoin_balance_usd').html($total_usd.toFixed(2));
+      });
   });
 
-  $.get('https://api.blockcypher.com/v1/ltc/main?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(data) {
-    lastest_url = data.latest_url;
-    console.log('lastest_url', lastest_url);
-    $.get(lastest_url+'?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(blockdata) {
-      txNormalFeeKB = 1000;
-      console.log(blockdata);
-      console.log('block', blockdata.fees, blockdata.size);
-      txfeeperbyte = blockdata.fees / blockdata.size;
-      fee = txNormalFeeKB * txfeeperbyte / LITECOIN_CONSTANTS.Litecoin.Satoshis;
-      $('#ltctxfee').val(fee.toFixed(8));
-    });
+  $.get('https://insight.litecore.io/api/utils/estimatefee').then(function(data) {
+    console.log('fee',data["2"]);
+    $('#ltctxfee').val(data["2"]);
   });
+
+  // $.get('https://api.blockcypher.com/v1/ltc/main?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(data) {
+  //   lastest_url = data.latest_url;
+  //   console.log('lastest_url', lastest_url);
+  //   $.get(lastest_url+'?token=4229aa6c1a434b10a7e889bb1bc6e731').then(function(blockdata) {
+  //     txNormalFeeKB = 1000;
+  //     console.log(blockdata);
+  //     console.log('block', blockdata.fees, blockdata.size);
+  //     txfeeperbyte = blockdata.fees / blockdata.size;
+  //     fee = txNormalFeeKB * txfeeperbyte / LITECOIN_CONSTANTS.Litecoin.Satoshis;
+  //     $('#ltctxfee').val(fee.toFixed(8));
+  //   });
+  // });
 }
 var litecoin_mywif  = null;
 var LTCWallet = [];
@@ -141,17 +152,15 @@ $('document').ready(function(){
         db_litecoin.insert(obj);
         $('#litecoin_wallet_address').html(address_lite);
         updateLTCWallet();
-        setInterval(updateLTCWallet, 3000);
+        setInterval(updateLTCWallet, 5000);
       } else {
         console.log('litecoin address', docs[0].address);
         $('#litecoin_wallet_address').html(docs[0].address);
         litecoin_mywif = docs[0].wif;
         address_lite = docs[0].address;
         updateLTCWallet();
-        setInterval(updateLTCWallet, 3000);
+        setInterval(updateLTCWallet, 5000);
       }
-
-
   });
 
 
@@ -245,7 +254,7 @@ function SendLitecoin(){
       ltc = $('#send_litecoin_amount').val();
       to_address = $('#send_litecoin_to').val();
       fee = $('#ltctxfee').val();
-      var fee = fee * LITECOIN_CONSTANTS.Litecoin.Satoshis;
+      var fee = parseInt(fee * LITECOIN_CONSTANTS.Litecoin.Satoshis);
       var address = $('#litecoin_wallet_address').html();
       const satoshis = Math.round(ltc * LITECOIN_CONSTANTS.Litecoin.Satoshis);
 
@@ -338,6 +347,10 @@ function readDecrypted(wif) {
 
 function CheckLitecoinAvailable(val){
   console.log(val);
+  if (parseFloat(val) < 0.001){
+    $('#sendltcbutton').prop('disabled', true);
+    return;
+  }
   fee = $('#ltctxfee').val();
   balance = $('#litecoin_balance').html();
   total_amount = parseFloat(fee) + parseFloat(val);
@@ -348,4 +361,6 @@ function CheckLitecoinAvailable(val){
   } else {
     $('#sendltcbutton').prop('disabled', true);
   }
+
+
 }

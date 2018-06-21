@@ -90,8 +90,6 @@ $('document').ready(function(){
   })
 });
 
-
-
 var ethers = require('ethers');
 const {shell} = require('electron')
 const {dialog} = require('electron').remote

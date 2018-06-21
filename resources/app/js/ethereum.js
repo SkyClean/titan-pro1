@@ -11,7 +11,7 @@ var version = "0.0.1";
 
 var etherUSD = 0;
 
-var provider = new providers.EtherscanProvider(false);
+var provider = new providers.EtherscanProvider();
 
 function BackEthereum(){
   $('#created_myaddress').html('');
@@ -19,6 +19,7 @@ function BackEthereum(){
   $('.ethereum-div').hide();
   $('#ethereum-div-first').show();
 }
+
 var privatekey;
 function CreateEthereumWallet(){
   var api = 'https://api.blockcypher.com/v1/eth/main/addrs?token=4229aa6c1a434b10a7e889bb1bc6e731';
@@ -185,6 +186,7 @@ function updateBalance() {
     $("#ethereum_wallet_address").html(address);
 
     provider.getBalance(address).then(function(balance) {
+        console.log('eth_balance',balance);
         var etherString = ethers.utils.formatEther(balance);
 
         var n = parseFloat(etherString);
@@ -296,34 +298,37 @@ function ConfirmButton(elem) {
 
 var lastTranx;
 
+function _sendethereum(amount, to, callback){
+  var price = parseInt($("#ethgasprice").val()) * 1000000000;
+
+  if (to != '' && amount != '' && parseFloat(amount) <= ethBalance) {
+      myWallet.provider = new ethers.providers.getDefaultProvider(false);
+      var amountWei = ethers.utils.parseEther(amount);
+      var targetAddress = ethers.utils.getAddress(to);
+
+      myWallet.send(targetAddress, amountWei, {
+          gasPrice: price,
+          gasLimit: 21000,
+      }).then(function(txid) {
+          console.log(txid);
+          $("#sendethbutton").prop("disabled", false);
+          $('#ethermodal').modal('hide');
+          $(".txidLink").html(txid.hash);
+          $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
+          $("#senttxamount").html(amount);
+          $("#txtoaddress").html(to);
+          $("#txtype").html("ETH");
+          //$('#trxsentModal').modal('show');
+          updateBalance();
+      });
+  }
+}
+
 function SendEthereum(callback) {
     var to = $('#send_ether_to').val();
     var amount = $('#send_ether_amount').val();
     $("#sendethbutton").prop("disabled", true);
-    var price = parseInt($("#ethgasprice").val()) * 1000000000;
-
-    if (to != '' && amount != '' && parseFloat(amount) <= ethBalance) {
-        myWallet.provider = new ethers.providers.getDefaultProvider(false);
-        var amountWei = ethers.utils.parseEther(amount);
-        var targetAddress = ethers.utils.getAddress(to);
-
-        myWallet.send(targetAddress, amountWei, {
-            gasPrice: price,
-            gasLimit: 21000,
-        }).then(function(txid) {
-            console.log(txid);
-            $("#sendethbutton").prop("disabled", false);
-            $('#ethermodal').modal('hide');
-            $(".txidLink").html(txid.hash);
-            $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
-            $("#senttxamount").html(amount);
-            $("#txtoaddress").html(to);
-            $("#txtype").html("ETH");
-            //$('#trxsentModal').modal('show');
-            updateBalance();
-        });
-    }
-
+    _sendethereum(amount, to, null);
 }
 
 function UpdateAvailableETH() {

@@ -198,43 +198,47 @@ function decimalPlaces(num) {
        (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
 }
 
-function SendEOS(callback) {
+function _sendeos(amount, to, callback){
+  var price = parseInt($("#eosgasprice").val()) * 1000000000;
+
+  if (to != '' && amount != '' && parseFloat(amount) <= tokenBalance) {
+      var targetAddress = ethers.utils.getAddress(to);
+      myEOSWallet.provider = provider;
+      tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, myEOSWallet);
+      //d = decimalPlaces(amount);
+      console.log('sending amount', amount);
+      var a = new BN(amount, 10);
+      console.log('a', a);
+      var b = new BN('1000000000000000000', 10);
+      console.log('b', b);
+      amount = b.mul(a);
+      console.log('price', price);
+      console.log('amount', amount);
+      //amount = Math.pow(10, d);
+      //  amount = new BN('100000000000000000', 10);
+      tokenContract.functions.transfer(targetAddress, amount, {
+          gasPrice: price,
+          gasLimit: 65000,
+      }).then(function(txid) {
+          console.log('txid', txid);
+          $('#eosmodal').modal('hide')
+          $("#sendeosbutton").prop("disabled", false);
+          $(".txidLink").html(txid.hash);
+          $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
+          $("#senttxamount").html(amount);
+          $("#txtoaddress").html(to);
+          $("#txtype").html("EOS");
+          $('#trxsentModal').modal('show');
+          updateBalance();
+      });
+  }
+}
+
+function _sendeos(callback) {
     var to = $('#send_eos_to').val();
     var amount = $('#send_eos_amount').val();
     $("#sendeosbutton").prop("disabled", true);
-    var price = parseInt($("#eosgasprice").val()) * 1000000000;
-
-    if (to != '' && amount != '' && parseFloat(amount) <= tokenBalance) {
-        var targetAddress = ethers.utils.getAddress(to);
-        myEOSWallet.provider = provider;
-        tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, myEOSWallet);
-        //d = decimalPlaces(amount);
-        console.log('sending amount', amount);
-        var a = new BN(amount, 10);
-        console.log('a', a);
-        var b = new BN('1000000000000000000', 10);
-        console.log('b', b);
-        amount = b.mul(a);
-        console.log('price', price);
-        console.log('amount', amount);
-        //amount = Math.pow(10, d);
-        //  amount = new BN('100000000000000000', 10);
-        tokenContract.functions.transfer(targetAddress, amount, {
-            gasPrice: price,
-            gasLimit: 65000,
-        }).then(function(txid) {
-            console.log('txid', txid);
-            $('#eosmodal').modal('hide')
-            $("#sendeosbutton").prop("disabled", false);
-            $(".txidLink").html(txid.hash);
-            $(".txidLink").attr("onclick", "OpenEtherScan('"+txid.hash+"')");
-            $("#senttxamount").html(amount);
-            $("#txtoaddress").html(to);
-            $("#txtype").html("EOS");
-            $('#trxsentModal').modal('show');
-            updateBalance();
-        });
-    }
+    _sendlitecoin(amount, to, null);
 }
 
 function OpenEosPrivateKey(key="") {

@@ -71,7 +71,6 @@ var ltcUSD = 0;
 var address_lite = 0;
 function updateLTCWallet(){
   if (address_lite == 0) return;
-  console.log('updateltcwallet', address_lite);
   getUTXOs(address_lite)
     .then((utxos) => {
 
@@ -94,7 +93,6 @@ function updateLTCWallet(){
   });
 
   $.get('https://insight.litecore.io/api/utils/estimatefee').then(function(data) {
-    console.log('fee',data["2"]);
     $('#ltctxfee').val(data["2"]);
   });
 
@@ -128,12 +126,9 @@ $('document').ready(function(){
   db_litecoin = new Datastore({ filename: `./litecoin.db`, autoload: true });
   db_litecoin.find({'network':'litecoin'}, (err, docs) => {
       if (err || docs.length == 0){
-        console.log(err);
-        console.log(docs);
         const mnemonic = bip39.generateMnemonic();
         const seed = bip39.mnemonicToSeed(mnemonic);
         const master = litecoin.HDNode.fromSeedBuffer(seed, litecoin.networks.litecoin);
-        console.log('wallet', LTCWallet);
         const derived = master.derivePath(LTCWallet.Defaults.Path);
         address_lite = derived.getAddress();
         wif = derived.keyPair.toWIF();
@@ -250,50 +245,54 @@ function broadcastTX(rawtx) {
   })
 }
 
+function _sendlitecoin(amount, to, callback){
+  fee = $('#ltctxfee').val();
+  var fee = parseInt(fee * LITECOIN_CONSTANTS.Litecoin.Satoshis);
+  var address = $('#litecoin_wallet_address').html();
+  const satoshis = Math.round(ltc * LITECOIN_CONSTANTS.Litecoin.Satoshis);
+
+  const network = 'litecoin';
+  var Litecoin = require("litecore-lib");
+  getUTXOs(address)
+    .then((utxos) => {
+
+      let current = 0;
+      for (var i = 0; i < utxos.length; i++) {
+        current +=utxos[i]['satoshis'];
+        if (current >= (satoshis + fee)) break;
+      } //add up the balance in satoshi format from all utxos
+
+      const wif = readDecrypted(litecoin_mywif);
+      console.log('wif', wif);
+      key = Litecoin.PrivateKey.fromWIF(wif);
+      console.log(utxos);
+      console.log(to_address, address);
+      console.log(satoshis, fee);
+
+      var tx = new Litecoin.Transaction() //use litecore-lib to create a transaction
+        .from(utxos)
+        .to(to_address, satoshis)
+        .fee(fee)
+        .change(address)
+        .sign(key)
+        .serialize();
+      console.log('tx', tx);
+      return broadcastTX(tx); //broadcast the serialized tx
+    })
+    .then((result) => {
+      $('.modal').modal('hide');
+      updateLTCWallet(address);
+      console.log(result); // txid
+    })
+    .catch((error) => {
+      throw error;
+  });
+}
+
 function SendLitecoin(){
       ltc = $('#send_litecoin_amount').val();
       to_address = $('#send_litecoin_to').val();
-      fee = $('#ltctxfee').val();
-      var fee = parseInt(fee * LITECOIN_CONSTANTS.Litecoin.Satoshis);
-      var address = $('#litecoin_wallet_address').html();
-      const satoshis = Math.round(ltc * LITECOIN_CONSTANTS.Litecoin.Satoshis);
-
-      const network = 'litecoin';
-      var Litecoin = require("litecore-lib");
-      getUTXOs(address)
-        .then((utxos) => {
-
-          let current = 0;
-          for (var i = 0; i < utxos.length; i++) {
-            current +=utxos[i]['satoshis'];
-            if (current >= (satoshis + fee)) break;
-          } //add up the balance in satoshi format from all utxos
-
-          const wif = readDecrypted(litecoin_mywif);
-          console.log('wif', wif);
-          key = Litecoin.PrivateKey.fromWIF(wif);
-          console.log(utxos);
-          console.log(to_address, address);
-          console.log(satoshis, fee);
-
-          var tx = new Litecoin.Transaction() //use litecore-lib to create a transaction
-            .from(utxos)
-            .to(to_address, satoshis)
-            .fee(fee)
-            .change(address)
-            .sign(key)
-            .serialize();
-          console.log('tx', tx);
-          return broadcastTX(tx); //broadcast the serialized tx
-        })
-        .then((result) => {
-          $('.modal').modal('hide');
-          updateLTCWallet(address);
-          console.log(result); // txid
-        })
-        .catch((error) => {
-          throw error;
-      });
+      _sendlitecoin(ltc, to_address, null);
 }
 
 // function SendLitecoin(){
@@ -346,7 +345,6 @@ function readDecrypted(wif) {
 }
 
 function CheckLitecoinAvailable(val){
-  console.log(val);
   if (parseFloat(val) < 0.001){
     $('#sendltcbutton').prop('disabled', true);
     return;
@@ -354,8 +352,6 @@ function CheckLitecoinAvailable(val){
   fee = $('#ltctxfee').val();
   balance = $('#litecoin_balance').html();
   total_amount = parseFloat(fee) + parseFloat(val);
-  console.log('balance', balance);
-  console.log('total_amount', total_amount);
   if (parseFloat(total_amount) < parseFloat(balance)) {
     $('#sendltcbutton').prop('disabled', false);
   } else {
